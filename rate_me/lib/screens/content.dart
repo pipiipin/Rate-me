@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class ContentChoice extends StatefulWidget {
   const ContentChoice({Key? key}) : super(key: key);
 
+static const routeName = '/content-screen';
+
   @override
   State<ContentChoice> createState() => _ContentChoice();
 }

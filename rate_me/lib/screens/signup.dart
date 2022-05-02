@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rate_me/screens/login.dart';
+import 'package:rate_me/screens/content.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -14,15 +15,20 @@ class _SignupScreen extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+                alignment: Alignment.centerLeft,
+              ),
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: const Text(
@@ -34,7 +40,6 @@ class _SignupScreen extends State<SignupScreen> {
                 textAlign: TextAlign.left,
               ),
             ),
-            SizedBox(height: size.height * 0.03),
             const SizedBox(
               height: 60,
             ),
@@ -62,17 +67,17 @@ class _SignupScreen extends State<SignupScreen> {
                       return null;
                     },
                     maxLines: 1,
-                    obscureText: true,
                     decoration: InputDecoration(
                       fillColor: const Color.fromARGB(255, 196, 196, 196),
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   const SizedBox(
                     width: double.infinity,
@@ -94,17 +99,17 @@ class _SignupScreen extends State<SignupScreen> {
                       return null;
                     },
                     maxLines: 1,
-                    obscureText: true,
                     decoration: InputDecoration(
                       fillColor: const Color.fromARGB(255, 196, 196, 196),
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   const SizedBox(
                     width: double.infinity,
@@ -132,11 +137,12 @@ class _SignupScreen extends State<SignupScreen> {
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   const SizedBox(
                     width: double.infinity,
@@ -164,6 +170,7 @@ class _SignupScreen extends State<SignupScreen> {
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
@@ -171,13 +178,18 @@ class _SignupScreen extends State<SignupScreen> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 15,
             ),
             Container(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {}
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ContentChoice()));
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),

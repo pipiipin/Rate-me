@@ -16,20 +16,23 @@ class _LoginScreen extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: const Color.fromARGB(255, 1, 33, 105),
       body: Container(
-        padding: const EdgeInsets.only(top: 0, left: 20, right: 20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.of(context).pop(),
-              alignment: const Alignment(0.5, 0.6),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+                alignment: Alignment.centerLeft,
+              ),
             ),
             Image(
-              image: new AssetImage("images/logo.png"),
+              image: new AssetImage("assets/logo.png"),
               width: 250,
               height: 250,
               fit: BoxFit.cover,
@@ -41,9 +44,9 @@ class _LoginScreen extends State<LoginScreen> {
             //     fontSize: 40,
             //   ),
             // ),
-            const SizedBox(
-              height: 50,
-            ),
+            // const SizedBox(
+            //   height: 50,
+            // ),
             Form(
               key: _formKey,
               child: Column(
@@ -60,7 +63,6 @@ class _LoginScreen extends State<LoginScreen> {
                     height: 10,
                   ),
                   TextFormField(
-                    style: const TextStyle(color: Colors.black),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your username';
@@ -68,7 +70,6 @@ class _LoginScreen extends State<LoginScreen> {
                       return null;
                     },
                     maxLines: 1,
-                    obscureText: true,
                     decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
@@ -92,7 +93,6 @@ class _LoginScreen extends State<LoginScreen> {
                     height: 10,
                   ),
                   TextFormField(
-                    style: const TextStyle(color: Colors.black),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
@@ -120,6 +120,7 @@ class _LoginScreen extends State<LoginScreen> {
                       padding: MaterialStateProperty.all<EdgeInsets>(
                         const EdgeInsets.fromLTRB(40, 15, 40, 15),
                       ),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
@@ -129,6 +130,7 @@ class _LoginScreen extends State<LoginScreen> {
                     child: const Text(
                       'Sign in',
                       style: TextStyle(
+                        color: Color.fromARGB(255, 1, 33, 105),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
