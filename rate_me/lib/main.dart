@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+// import 'package:rate_me/components/bottombar.dart';
 import 'package:rate_me/screens/login.dart';
-import 'package:rate_me/screens/welcome.dart';
 import 'package:rate_me/screens/signup.dart';
 import 'package:rate_me/screens/content.dart';
 
@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
       ),
       home: const SplashScreen(),
       routes: {
-        WelcomeScreen.routeName: (context) => const WelcomeScreen(),
         SignupScreen.routeName: (context) => const SignupScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         ContentChoice.routeName: (context) => const ContentChoice(),
@@ -128,11 +127,12 @@ class _BottomPart extends StatelessWidget {
                 'Login',
                 style: TextStyle(
                   fontSize: 20,
+                  fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 1, 33, 105),
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(220, 45),
+                  minimumSize: const Size(280, 45),
                   primary: Colors.white,
                   elevation: 10,
                   shape: RoundedRectangleBorder(
@@ -149,11 +149,12 @@ class _BottomPart extends StatelessWidget {
                 'Register',
                 style: TextStyle(
                   color: Color.fromARGB(255, 1, 33, 105),
+                  fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(220, 45),
+                  minimumSize: const Size(280, 45),
                   primary: Colors.white,
                   elevation: 10,
                   shape: RoundedRectangleBorder(

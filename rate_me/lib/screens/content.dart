@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ContentChoice extends StatefulWidget {
   const ContentChoice({Key? key}) : super(key: key);
 
-static const routeName = '/content-screen';
+  static const routeName = '/content-screen';
 
   @override
   State<ContentChoice> createState() => _ContentChoice();
@@ -25,7 +25,8 @@ class _ContentChoice extends State<ContentChoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Container(
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -88,13 +89,11 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
     List<Widget> choices = [];
 
     for (var item in widget.typeList) {
-      choices.add(
-        Container(
+      choices.add(Container(
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
           label: Text(item),
-          labelStyle: TextStyle(
-              fontSize: 14.0),
+          labelStyle: TextStyle(fontSize: 14.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
