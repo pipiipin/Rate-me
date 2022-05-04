@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:rate_me/screens/welcome.dart';
 
 class ContentChoice extends StatefulWidget {
   const ContentChoice({Key? key}) : super(key: key);
@@ -30,7 +33,7 @@ class _ContentChoice extends State<ContentChoice> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             const Text(
@@ -60,7 +63,10 @@ class _ContentChoice extends State<ContentChoice> {
                         fontSize: 14.0,
                         fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const WelcomeScreen())),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0))),
             ),
@@ -93,12 +99,12 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
           label: Text(item),
-          labelStyle: TextStyle(fontSize: 14.0),
+          labelStyle: const TextStyle(fontSize: 14.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          backgroundColor: Color(0xffededed),
-          selectedColor: Color.fromARGB(255, 230, 76, 76),
+          backgroundColor: const Color(0xffededed),
+          selectedColor: const Color.fromARGB(255, 230, 76, 76),
           selected: selectedChoices.contains(item),
           onSelected: (selected) {
             setState(() {
