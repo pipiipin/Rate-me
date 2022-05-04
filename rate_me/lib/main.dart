@@ -1,16 +1,31 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rate_me/screens/home.dart';
+
 // import 'package:rate_me/components/bottombar.dart';
 import 'package:rate_me/screens/login.dart';
 import 'package:rate_me/screens/signup.dart';
 import 'package:rate_me/screens/content.dart';
+import 'package:rate_me/movie_app.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'movie_app.dart';
+
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,6 +39,7 @@ class MyApp extends StatelessWidget {
         SignupScreen.routeName: (context) => const SignupScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         ContentChoice.routeName: (context) => const ContentChoice(),
+        MovieApp.routeName: (context) => const MovieApp(),
       },
     );
   }
@@ -121,8 +137,20 @@ class _BottomPart extends StatelessWidget {
           children: [
             const SizedBox(height: 30.0),
             ElevatedButton(
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen())),
+              onPressed: () =>
+                  // StreamBuilder<User?>(
+                  //     stream: FirebaseAuth.instance.authStateChanges(),
+                  //     builder: (context, snapshot) {
+                  //       if (snapshot.hasData) {
+                  //         return LoginScreen();
+                  //       } else {
+                  //         return ContentChoice();
+                  //       }
+                  //     }),
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen())),
               child: const Text(
                 'Login',
                 style: TextStyle(

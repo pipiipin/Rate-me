@@ -1,5 +1,13 @@
+import 'dart:developer';
+import 'dart:html';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rate_me/screens/signup.dart';
+import 'package:rate_me/screens/login.dart';
+import 'package:rate_me/movie_app.dart';
+
+import 'package:rate_me/screens/content.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,6 +19,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -63,6 +81,7 @@ class _LoginScreen extends State<LoginScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: emailController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your username';
@@ -93,6 +112,7 @@ class _LoginScreen extends State<LoginScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
@@ -114,13 +134,48 @@ class _LoginScreen extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      signIn();
+                      print("press");
+                      FirebaseAuth.instance
+                          .authStateChanges()
+                          .listen((User? user) {
+                        if (user == null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
+                          print('User is currently signed out!');
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MovieApp(),
+                            ),
+                          );
+                          print('User is signed in!');
+                        }
+                      });
+                      // StreamBuilder<User?>(
+                      //   stream: FirebaseAuth.instance.authStateChanges(),
+                      //   builder: (context, snapshot) {
+                      //     if (snapshot.hasData) {
+                      //       print("loginsuccess");
+                      //       return ContentChoice();
+                      //     } else {
+                      //       print("loginnotsuccess");
+                      //       return LoginScreen();
+                      //     }
+                      //   });
                       if (_formKey.currentState!.validate()) {}
                     },
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(
                         const EdgeInsets.fromLTRB(40, 15, 40, 15),
                       ),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
@@ -161,6 +216,13 @@ class _LoginScreen extends State<LoginScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future signIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
     );
   }
 }

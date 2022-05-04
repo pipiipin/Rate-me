@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rate_me/screens/login.dart';
 import 'package:rate_me/screens/content.dart';
@@ -13,6 +14,10 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreen extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordconController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +30,9 @@ class _SignupScreen extends State<SignupScreen> {
               alignment: Alignment.centerLeft,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
                 alignment: Alignment.centerLeft,
               ),
             ),
@@ -57,26 +64,6 @@ class _SignupScreen extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your username';
-                      }
-                      return null;
-                    },
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                      fillColor: const Color.fromARGB(255, 196, 196, 196),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
                     height: 15,
                   ),
                   const SizedBox(
@@ -92,6 +79,7 @@ class _SignupScreen extends State<SignupScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: emailController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
@@ -124,9 +112,12 @@ class _SignupScreen extends State<SignupScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
+                      } else if (value.length < 6) {
+                        return 'Please enter min 6 character';
                       }
                       return null;
                     },
@@ -157,9 +148,13 @@ class _SignupScreen extends State<SignupScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: passwordconController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please re-enter your password';
+                      }
+                      if (passwordController.text != passwordconController.text) {
+                        return 'your confirm password is not match';
                       }
                       return null;
                     },
@@ -184,7 +179,10 @@ class _SignupScreen extends State<SignupScreen> {
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: () {
+                  print(passwordController.text);
+                  print(passwordconController.text);
                   if (_formKey.currentState!.validate()) {
+                    signUp();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -229,5 +227,16 @@ class _SignupScreen extends State<SignupScreen> {
         ),
       ),
     );
+  }
+
+  Future signUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
+      print('signup');
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
   }
 }
