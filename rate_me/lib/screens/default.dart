@@ -1,5 +1,7 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_literals_to_create_immutables, deprecated_member_use
 import 'package:flutter/material.dart';
+import 'package:rate_me/components/category.dart';
+import 'package:rate_me/screens/home.dart';
 import 'package:rate_me/screens/notification.dart';
 import 'package:rate_me/screens/top100.dart';
 import 'package:rate_me/screens/yourlist.dart';
@@ -15,7 +17,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
   int pageIndex = 0;
 
   final pages = [
-    const Page1(),
+    const HomeWidget(),
     const Top100Screen(),
     const NotifyScreen(),
     const YourListScreen(),
@@ -50,12 +52,12 @@ class _DefaultScreenState extends State<DefaultScreen> {
             icon: pageIndex == 0
                 ? const Icon(
                     Icons.home_filled,
-                    color: Colors.amber,
+                    color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
                     Icons.home_filled,
-                    color: Colors.white,
+                    color: Colors.black,
                     size: 35,
                   ),
           ),
@@ -69,12 +71,12 @@ class _DefaultScreenState extends State<DefaultScreen> {
             icon: pageIndex == 1
                 ? const Icon(
                     Icons.equalizer,
-                    color: Colors.amber,
+                    color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
                     Icons.equalizer,
-                    color: Colors.white,
+                    color: Colors.black,
                     size: 35,
                   ),
           ),
@@ -88,12 +90,12 @@ class _DefaultScreenState extends State<DefaultScreen> {
             icon: pageIndex == 2
                 ? const Icon(
                     Icons.access_time_filled,
-                    color: Colors.amber,
+                    color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
                     Icons.access_time_filled,
-                    color: Colors.white,
+                    color: Colors.black,
                     size: 35,
                   ),
           ),
@@ -107,12 +109,12 @@ class _DefaultScreenState extends State<DefaultScreen> {
             icon: pageIndex == 3
                 ? const Icon(
                     Icons.add,
-                    color: Colors.amber,
+                    color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
                     Icons.add,
-                    color: Colors.white,
+                    color: Colors.black,
                     size: 35,
                   ),
           ),
@@ -126,12 +128,12 @@ class _DefaultScreenState extends State<DefaultScreen> {
             icon: pageIndex == 4
                 ? const Icon(
                     Icons.account_circle,
-                    color: Colors.amber,
+                    color: Colors.white,
                     size: 35,
                   )
                 : const Icon(
                     Icons.account_circle,
-                    color: Colors.white,
+                    color: Colors.black,
                     size: 35,
                   ),
           ),
@@ -140,28 +142,6 @@ class _DefaultScreenState extends State<DefaultScreen> {
     );
   }
 }
-
-class Page1 extends StatelessWidget {
-  const Page1({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          "Home",
-          style: TextStyle(
-            color: Colors.green[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
 
 class Page5 extends StatelessWidget {
   const Page5({Key? key}) : super(key: key);
