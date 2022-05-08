@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rate_me/screens/default.dart';
+import 'package:rate_me/components/category.dart';
 
 // import 'package:rate_me/components/bottombar.dart';
 import 'package:rate_me/screens/login.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DefaultScreen(),
+      home: const IntroScreen(),
       routes: {
         SignupScreen.routeName: (context) => const SignupScreen(),
         SigninScreen.routeName: (context) => const SigninScreen(),
@@ -123,8 +124,10 @@ class _BottomPart extends StatelessWidget {
           children: [
             const SizedBox(height: 30.0),
             ElevatedButton(
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const SigninScreen())),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SigninScreen())),
               child: const Text(
                 'Log in',
                 style: TextStyle(
