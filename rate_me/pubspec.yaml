@@ -58,6 +58,7 @@ flutter:
     - assets/popcorn.json
     - assets/cinema-clap.json
     - assets/redsuccess.json
+    - assets/movie_example.jpg
 
 
   # The following line ensures that the Material Icons font is

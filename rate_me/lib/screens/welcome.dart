@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rate_me/screens/default.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({
@@ -87,7 +88,7 @@ class _WelcomeScreen extends State<WelcomeScreen>
                         ..forward().whenComplete(() => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
+                                  builder: (context) => const DefaultScreen()),
                             ));
                     },
                   ),

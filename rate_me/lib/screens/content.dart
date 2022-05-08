@@ -28,50 +28,76 @@ class _ContentChoice extends State<ContentChoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(
-              height: 50,
-            ),
-            const Text(
-              'Which type of content you interest in',
-              style: TextStyle(color: Colors.black, fontSize: 18.0),
-            ),
-            SizedBox(
-              height: 40,
-              width: MediaQuery.of(context).size.width,
-            ),
-            MultiSelectChip(
-              movies,
-              onSelectionChanged: (selectedList) {
-                setState(() {
-                  selectedReportList = selectedList;
-                });
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 32.0),
-              child: RaisedButton(
-                  color: const Color.fromARGB(255, 0, 48, 137),
-                  child: const Text(
-                    'Sign up',
-                    style: TextStyle(
-                        color: Color(0xffffffff),
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold),
+      body: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 50.0, left: 20.0),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: TextButton(
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const WelcomeScreen())),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0))),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
             ),
-          ],
-        ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(
+                  height: 120,
+                ),
+                const Text(
+                  'Which type of content you interest in',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width,
+                ),
+                MultiSelectChip(
+                  movies,
+                  onSelectionChanged: (selectedList) {
+                    setState(() {
+                      selectedReportList = selectedList;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: RaisedButton(
+                      padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                      color: const Color.fromARGB(255, 0, 48, 137),
+                      child: const Text(
+                        'Sign up',
+                        style: TextStyle(
+                            color: Color(0xffffffff),
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const WelcomeScreen())),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0))),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -98,8 +124,9 @@ class _MultiSelectChipState extends State<MultiSelectChip> {
       choices.add(Container(
         padding: const EdgeInsets.all(2.0),
         child: ChoiceChip(
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           label: Text(item),
-          labelStyle: const TextStyle(fontSize: 14.0),
+          labelStyle: const TextStyle(fontSize: 16.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rate_me/screens/default.dart';
+
 // import 'package:rate_me/components/bottombar.dart';
 import 'package:rate_me/screens/login.dart';
 import 'package:rate_me/screens/signup.dart';
@@ -19,24 +21,24 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(),
+      home: const IntroScreen(),
       routes: {
         SignupScreen.routeName: (context) => const SignupScreen(),
-        LoginScreen.routeName: (context) => const LoginScreen(),
+        SigninScreen.routeName: (context) => const SigninScreen(),
         ContentChoice.routeName: (context) => const ContentChoice(),
       },
     );
   }
 }
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+class IntroScreen extends StatefulWidget {
+  const IntroScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<IntroScreen> createState() => _IntroScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _IntroScreenState extends State<IntroScreen>
     with TickerProviderStateMixin {
   late AnimationController _openingController;
   bool logoAnimated = false;
@@ -122,9 +124,9 @@ class _BottomPart extends StatelessWidget {
             const SizedBox(height: 30.0),
             ElevatedButton(
               onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen())),
+                  MaterialPageRoute(builder: (context) => const SigninScreen())),
               child: const Text(
-                'Login',
+                'Log in',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
