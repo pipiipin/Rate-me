@@ -158,8 +158,8 @@ class _YourListScreen extends State<YourListScreen> {
                               ),
                               IconButton(
                                 icon: const Icon(
-                                  Icons.library_add_check,
-                                  color: Colors.yellow,
+                                  Icons.check,
+                                  color: Colors.black,
                                   size: 40,
                                 ),
                                 onPressed: () {
