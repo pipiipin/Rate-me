@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
+import 'package:rate_me/screens/notification.dart';
 import 'package:rate_me/screens/top100.dart';
 import 'package:rate_me/screens/yourlist.dart';
 
@@ -16,7 +17,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
   final pages = [
     const Page1(),
     const Top100Screen(),
-    const Page3(),
+    const NotifyScreen(),
     const YourListScreen(),
     const Page5(),
   ];
@@ -160,35 +161,7 @@ class Page1 extends StatelessWidget {
   }
 }
 
-class Page3 extends StatelessWidget {
-  const Page3({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 70,
-        backgroundColor: const Color.fromARGB(255, 1, 33, 105),
-        title: const Text(
-          'Notification',
-          style: TextStyle(color: Colors.white, fontSize: 36),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: Center(
-        child: Text(
-          "Notification",
-          style: TextStyle(
-            color: Colors.green[900],
-            fontSize: 45,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class Page5 extends StatelessWidget {
   const Page5({Key? key}) : super(key: key);
