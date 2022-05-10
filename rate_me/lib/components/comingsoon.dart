@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rate_me/screens/movie.dart';
 
 class comingsoon extends StatefulWidget {
   const comingsoon({Key? key}) : super(key: key);
@@ -65,18 +66,24 @@ class _comingsoonState extends State<comingsoon> {
             borderRadius: BorderRadius.circular(10),
           ),
           color: Colors.black,
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image(
-                  image: AssetImage(movies[index]),
-                  width: 100,
-                  height: 158,
-                  fit: BoxFit.cover,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const MovieScreen()));
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image(
+                    image: AssetImage(movies[index]),
+                    width: 100,
+                    height: 158,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

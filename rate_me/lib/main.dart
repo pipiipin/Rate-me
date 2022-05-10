@@ -5,6 +5,7 @@ import 'package:rate_me/components/category.dart';
 
 // import 'package:rate_me/components/bottombar.dart';
 import 'package:rate_me/screens/login.dart';
+import 'package:rate_me/screens/movie.dart';
 import 'package:rate_me/screens/signup.dart';
 import 'package:rate_me/screens/content.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DefaultScreen(),
+      home: const MovieScreen(),
       routes: {
         SignupScreen.routeName: (context) => const SignupScreen(),
         SigninScreen.routeName: (context) => const SigninScreen(),

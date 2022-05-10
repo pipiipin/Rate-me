@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:rate_me/screens/home.dart';
 import 'package:rate_me/screens/notification.dart';
-import 'package:rate_me/screens/profile.dart';
+// import 'package:rate_me/screens/profile.dart';
 import 'package:rate_me/screens/top100.dart';
 import 'package:rate_me/screens/yourlist.dart';
 
@@ -17,7 +17,7 @@ class _DefaultScreenState extends State<DefaultScreen> {
   int pageIndex = 0;
 
   final pages = [
-    const HomeWidget(),
+    const HomeScreen(),
     const Top100Screen(),
     const NotifyScreen(),
     const YourListScreen(),
@@ -138,6 +138,24 @@ class _DefaultScreenState extends State<DefaultScreen> {
                   ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Profile')
+          ],
+        ),
       ),
     );
   }

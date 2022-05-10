@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rate_me/screens/movie.dart';
 
 class Top100Screen extends StatefulWidget {
   const Top100Screen({Key? key}) : super(key: key);
@@ -69,10 +70,10 @@ class _Top100ListState extends State<Top100List> {
           ),
           color: Colors.white,
           child: InkWell(
-            // onTap: () {
-            //   Navigator.push(context,
-            //       MaterialPageRoute(builder: (context) => const YourListScreen()));
-            // },
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const MovieScreen()));
+            },
             child: SizedBox(
               width: 117,
               height: 200,

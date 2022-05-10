@@ -7,16 +7,14 @@ import 'package:rate_me/components/top10_movies.dart';
 import 'package:rate_me/components/comingsoon.dart';
 import 'package:rate_me/components/category.dart';
 
-class HomeWidget extends StatefulWidget {
-  const HomeWidget({Key? key}) : super(key: key);
-
-  static const routeName = '/content-screen';
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeWidget> createState() => _HomeWidget();
+  State<HomeScreen> createState() => _HomeScreen();
 }
 
-class _HomeWidget extends State<HomeWidget> {
+class _HomeScreen extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
