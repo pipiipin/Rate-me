@@ -62,23 +62,23 @@ class _HomeWidget extends State<HomeWidget> {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(15),
-                        child: Column(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Stranger things",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 24),
+                            Column(children: [
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Stranger Things",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                children: [
                                   Container(
                                     padding:
                                         const EdgeInsets.fromLTRB(15, 2, 15, 2),
@@ -109,23 +109,33 @@ class _HomeWidget extends State<HomeWidget> {
                                           104, 103, 103, 103),
                                     ),
                                   ),
-                                ]),
-                                Row(
-                                  children: const [
-                                    Icon(
-                                      Icons.fastfood,
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                      size: 30,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "98%",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ),
-                                  ],
+                                ],
+                              ),
+                            ]),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/popcorn.png"),
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                // Icon(
+                                //   Icons.fastfood,
+                                //   color: Color.fromARGB(255, 255, 255, 255),
+                                //   size: 30,
+                                // ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                const Text(
+                                  "98%",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
                                 ),
                               ],
                             ),

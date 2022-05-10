@@ -63,6 +63,9 @@ flutter:
     - assets/like.png
     - assets/pencil.png
     - assets/poster.jpg
+    - assets/popcorn.png
+    - assets/popcorn1.png
+    - assets/poppop.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

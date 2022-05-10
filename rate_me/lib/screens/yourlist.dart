@@ -143,9 +143,18 @@ class _YourListScreen extends State<YourListScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 // ignore: prefer_const_literals_to_create_immutables
                                 children: [
-                                  const Icon(Icons.fastfood),
+                                  Container(
+                                  width: 34,
+                                  height: 34,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/popcorn.png"),
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
                                   const SizedBox(
-                                    width: 10,
+                                    width: 5,
                                   ),
                                   const Text(
                                     "55%",
@@ -153,9 +162,7 @@ class _YourListScreen extends State<YourListScreen> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
+                              
                               IconButton(
                                 icon: const Icon(
                                   Icons.check,

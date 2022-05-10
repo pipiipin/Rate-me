@@ -75,7 +75,7 @@ class _Top100ListState extends State<Top100List> {
             // },
             child: SizedBox(
               width: 117,
-              height: 210,
+              height: 200,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -105,9 +105,18 @@ class _Top100ListState extends State<Top100List> {
                         Row(
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            const Icon(Icons.fastfood),
+                            Container(
+                                  width: 20,
+                                  height: 20,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/popcorn.png"),
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
                             const SizedBox(
-                              width: 10,
+                              width: 2,
                             ),
                             const Text(
                               "95%",

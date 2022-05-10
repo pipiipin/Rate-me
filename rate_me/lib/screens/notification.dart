@@ -29,11 +29,9 @@ class _NotifyScreen extends State<NotifyScreen> {
     } else if (_typeNotify == "comment") {
       _image = "assets/pencil.png";
     }
-
-    print("Title: $_typeNotify"); // works
-    print("Image: $_image");
+    // print("Title: $_typeNotify"); 
+    // print("Image: $_image");
     return _image;
-    // works
   }
 
   @override
