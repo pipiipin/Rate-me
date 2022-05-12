@@ -1,7 +1,6 @@
 import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
-import 'package:movie_page/movieScreen.dart';
 
 class TabBarPage extends StatefulWidget {
   const TabBarPage({Key? key}) : super(key: key);

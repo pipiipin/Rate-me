@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 
-class Top100Screen extends StatefulWidget {
-  const Top100Screen({Key? key}) : super(key: key);
+class ResultScreen extends StatefulWidget {
+  final String genre;
+
+  const ResultScreen({Key? key, required this.genre}) : super(key: key);
 
   @override
-  _Top100Screen createState() => _Top100Screen();
+  _ResultScreen createState() => _ResultScreen();
 }
 
-class _Top100Screen extends State<Top100Screen> {
+class _ResultScreen extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         toolbarHeight: 70,
         backgroundColor: const Color.fromARGB(255, 1, 33, 105),
-        title: const Text(
-          'Top 100',
+        title: Text(
+          widget.genre,
           style: TextStyle(color: Colors.white, fontSize: 36),
         ),
         centerTitle: true,
@@ -27,7 +33,7 @@ class _Top100Screen extends State<Top100Screen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Top100List(),
+              ResultList(genre: widget.genre),
             ],
           ),
         ),
@@ -36,13 +42,14 @@ class _Top100Screen extends State<Top100Screen> {
   }
 }
 
-class Top100List extends StatefulWidget {
-  const Top100List({Key? key}) : super(key: key);
+class ResultList extends StatefulWidget {
+  final String genre;
+  const ResultList({Key? key, required this.genre}) : super(key: key);
   @override
-  _Top100ListState createState() => _Top100ListState();
+  _ResultListState createState() => _ResultListState();
 }
 
-class _Top100ListState extends State<Top100List> {
+class _ResultListState extends State<ResultList> {
   List movie = [];
   final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
   final readaccesstoken =
@@ -61,7 +68,37 @@ class _Top100ListState extends State<Top100List> {
           showErrorLogs: true,
         ));
 
-    Map topresult = await tmdbWithCustomLogs.v3.movies.getTopRated();
+    String genreid = "0";
+    if (widget.genre == "Horror") {
+      genreid = "27";
+    }
+    if (widget.genre == "Action") {
+      genreid = "28";
+    }
+    if (widget.genre == "Comedy") {
+      genreid = "35";
+    }
+    if (widget.genre == "Crime") {
+      genreid = "80";
+    }
+    if (widget.genre == "Drama") {
+      genreid = "18";
+    }
+    if (widget.genre == "Fantasy") {
+      genreid = "14";
+    }
+    if (widget.genre == "Science Fiction") {
+      genreid = "878";
+    }
+    if (widget.genre == "Romance") {
+      genreid = "10749";
+    }
+    if (widget.genre == "Adventure") {
+      genreid = "12";
+    }
+
+    Map topresult =
+        await tmdbWithCustomLogs.v3.discover.getMovies(withGenres: genreid);
 
     setState(() {
       movie = topresult['results'];

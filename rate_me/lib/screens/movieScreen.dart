@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_page/tab_view.dart';
+import 'package:rate_me/components/tab_view.dart';
 
 void main() {
   runApp(const MyApp());
