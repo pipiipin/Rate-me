@@ -24,13 +24,7 @@ class _Top100Screen extends State<Top100Screen> {
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Top100List(),
-            ],
-          ),
-        ),
+        child: const Top100List(),
       ),
     );
   }
@@ -56,7 +50,7 @@ class _Top100ListState extends State<Top100List> {
 
   loadtrendingmovie() async {
     TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
-        logConfig: ConfigLogger(
+        logConfig: const ConfigLogger(
           showLogs: true,
           showErrorLogs: true,
         ));
@@ -69,29 +63,30 @@ class _Top100ListState extends State<Top100List> {
   }
 
   _buildTop100List() {
-    List<Widget> cards = [];
+    return GridView.count(
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 20,
+      crossAxisCount: 3,
+      childAspectRatio: (2.8/5),
+      children: List.generate(
+        10,
+        (index) {
+          String path =
+              'https://image.tmdb.org/t/p/w200' + movie[index]['poster_path'];
 
-    for (var index = 0; index < 18; index++) {
-      String path =
-          'https://image.tmdb.org/t/p/w200' + movie[index]['poster_path'];
+          String score = movie[index]['vote_average'].round().toString() + "%";
 
-      String score = movie[index]['vote_average'].round().toString() + "%";
-
-      cards.add(
-        Card(
-          margin: const EdgeInsets.only(top: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          color: Colors.white,
-          child: InkWell(
-            // onTap: () {
-            //   Navigator.push(context,
-            //       MaterialPageRoute(builder: (context) => const YourListScreen()));
-            // },
-            child: SizedBox(
-              width: 117,
-              height: 210,
+          return Card(
+            margin: const EdgeInsets.only(top: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            color: Colors.white,
+            child: InkWell(
+              // onTap: () {
+              //   Navigator.push(context,
+              //       MaterialPageRoute(builder: (context) => const YourListScreen()));
+              // },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -101,8 +96,7 @@ class _Top100ListState extends State<Top100List> {
                     //   image: AssetImage("assets/movie_example.jpg"),
                     child: Image.network(
                       path,
-                      width: 117,
-                      height: 170,
+                      width: double.maxFinite,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -129,7 +123,7 @@ class _Top100ListState extends State<Top100List> {
                             ),
                             Text(
                               score,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 10),
                             ),
                           ],
@@ -140,19 +134,14 @@ class _Top100ListState extends State<Top100List> {
                 ],
               ),
             ),
-          ),
-        ),
-      );
-    }
-
-    return cards;
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 18,
-      children: _buildTop100List(),
-    );
+    return _buildTop100List();
   }
 }

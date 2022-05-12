@@ -45,7 +45,7 @@ Widget rectangle = Row(
       height: 175.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
-        color: Color.fromARGB(255, 233, 233, 233),
+        color: const Color.fromARGB(255, 233, 233, 233),
       ),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
