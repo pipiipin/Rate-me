@@ -36,10 +36,21 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   lottie: ^1.3.0
+ 
+  firebase_auth: ^3.3.4
+  flutter_riverpod: ^1.0.3
+  dio: ^4.0.6
+  flutter_animated_dialog: ^2.0.1
+  readmore: ^2.1.0
+  firebase_core: ^1.16.0
+  path_provider: ^2.0.10
+  tmdb_api:
+  google_fonts:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -59,8 +70,17 @@ flutter:
     - assets/cinema-clap.json
     - assets/redsuccess.json
     - assets/movie_example.jpg
-
-
+    - assets/like.png
+    - assets/pencil.png
+    - assets/poster.jpg
+    - assets/avenger.png
+    - assets/minipos.png
+    - assets/ratepopcorn.png
+    - assets/netflix.png
+    - assets/disney.png
+    - assets/pro2.png
+    - assets/logo1.png
+    
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

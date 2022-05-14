@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rate_me/screens/default.dart';
-
+import 'package:rate_me/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:rate_me/components/bottombar.dart';
 import 'package:rate_me/screens/login.dart';
 import 'package:rate_me/screens/signup.dart';
 import 'package:rate_me/screens/content.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,11 +29,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const IntroScreen(),
+      home: const DefaultScreen(),
       routes: {
         SignupScreen.routeName: (context) => const SignupScreen(),
-        SigninScreen.routeName: (context) => const SigninScreen(),
+        LoginScreen.routeName: (context) => const LoginScreen(),
         ContentChoice.routeName: (context) => const ContentChoice(),
+        HomeScreen.routeName: (context) => const HomeScreen(),
       },
     );
   }
@@ -124,7 +133,7 @@ class _BottomPart extends StatelessWidget {
             const SizedBox(height: 30.0),
             ElevatedButton(
               onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const SigninScreen())),
+                  MaterialPageRoute(builder: (context) => const LoginScreen())),
               child: const Text(
                 'Log in',
                 style: TextStyle(
