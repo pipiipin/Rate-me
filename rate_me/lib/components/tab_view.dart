@@ -1,7 +1,5 @@
-import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
-import 'package:movie_page/movieScreen.dart';
 
 class TabBarPage extends StatefulWidget {
   const TabBarPage({Key? key}) : super(key: key);
@@ -17,7 +15,14 @@ class _TabBarPageState extends State<TabBarPage>
   @override
   void initState() {
     tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(_handleTabSelection);
     super.initState();
+  }
+
+  _handleTabSelection() {
+    if (tabController.indexIsChanging) {
+      setState(() {});
+    }
   }
 
   @override
@@ -27,108 +32,278 @@ class _TabBarPageState extends State<TabBarPage>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 20,
-      ),
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: [
-            // posthead,
-            // rectangle,
-            // rateAndaddToList,
-            Container(
-              // height: 50,
-              width: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: TabBar(
-                      unselectedLabelColor: Colors.redAccent,
-                      indicatorSize: TabBarIndicatorSize.label,
-                      indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.redAccent,
+  build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              TabBar(
+                unselectedLabelColor: const Color.fromARGB(255, 189, 189, 189),
+                indicatorSize: TabBarIndicatorSize.label,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Colors.redAccent,
+                ),
+                controller: tabController,
+                tabs: [
+                  Tab(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border:
+                              Border.all(color: Colors.redAccent, width: 1)),
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text("Comment"),
                       ),
-                      controller: tabController,
-                      tabs: [
-                        Tab(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                border: Border.all(
-                                    color: Colors.redAccent, width: 1)),
-                            child: const Align(
-                              alignment: Alignment.center,
-                              child: Text("Comment"),
-                            ),
-                          ),
-                        ),
-                        Tab(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                border: Border.all(
-                                    color: Colors.redAccent, width: 1)),
-                            child: const Align(
-                              alignment: Alignment.center,
-                              child: Text("Description"),
-                            ),
-                          ),
-                        ),
-                        Tab(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                border: Border.all(
-                                    color: Colors.redAccent, width: 1)),
-                            child: const Align(
-                              alignment: Alignment.center,
-                              child: Text("Watch now"),
-                            ),
-                          ),
-                        ),
-                      ],
+                    ),
+                  ),
+                  Tab(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border:
+                              Border.all(color: Colors.redAccent, width: 1)),
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text("Description"),
+                      ),
+                    ),
+                  ),
+                  Tab(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border:
+                              Border.all(color: Colors.redAccent, width: 1)),
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text("Watch now"),
+                      ),
                     ),
                   ),
                 ],
               ),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: tabController,
+              children: const [
+                Tab1(),
+                Tab2(),
+                Tab3(),
+              ],
             ),
-            Expanded(
-              child: TabBarView(
-                controller: tabController,
-                children: const [
-                  Tab1(),
-                  Tab2(),
-                  Tab3(),
-                ],
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
 }
 
-class Tab1 extends StatelessWidget {
+class Tab1 extends StatefulWidget {
   const Tab1({Key? key}) : super(key: key);
+
+  @override
+  _Tab1 createState() => _Tab1();
+}
+
+class _Tab1 extends State<Tab1> {
+  final List<String> users = [
+    'Breyden Cooler',
+    'Aaron Sosick',
+    'Breyden Cooler',
+    'Aaron Sosick',
+  ];
+
+  _commentList() {
+    return Expanded(
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: users.length,
+          itemBuilder: (context, index) {
+            return Card(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Image.asset(
+                        "assets/pro2.png",
+                        color: null,
+                        fit: BoxFit.cover,
+                        colorBlendMode: BlendMode.dstATop,
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          users[index],
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 25.0,
+                            fontFamily: 'Sarala',
+                            fontWeight: FontWeight.w800,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Text(
+                          "That's lit!!!",
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontFamily: 'Sarala',
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Icon(Icons.more_vert, color: Colors.black),
+                        Row(
+                          children: const [
+                            Text(
+                              '50.4 K',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                fontFamily: 'Sarala',
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                            Icon(
+                              Icons.thumb_up,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
+  }
+
+  _commentWithNPList() {
+    return Expanded(
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: users.length,
+          itemBuilder: (context, index) {
+            return Card(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Image.asset(
+                        "assets/pro2.png",
+                        color: null,
+                        fit: BoxFit.cover,
+                        colorBlendMode: BlendMode.dstATop,
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          users[index],
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 25.0,
+                            fontFamily: 'Sarala',
+                            fontWeight: FontWeight.w800,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const Text(
+                          "That's lit!!!",
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontFamily: 'Sarala',
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Icon(Icons.more_vert, color: Colors.black),
+                        Row(
+                          children: const [
+                            Text(
+                              '50.4 K',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                fontFamily: 'Sarala',
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ),
+                            Icon(
+                              Icons.thumb_up,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: <Widget>[
+        children: [
           DefaultTabController(
             length: 2, // length of tabs
             initialIndex: 0,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+              children: [
                 const TabBar(
                   labelColor: Colors.green,
                   unselectedLabelColor: Colors.black,
@@ -138,28 +313,16 @@ class Tab1 extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  height: 450, //height of TabBarView
+                  height: 600,
                   decoration: const BoxDecoration(
                       border: Border(
                           top: BorderSide(color: Colors.grey, width: 0.5))),
                   child: TabBarView(
-                    children: <Widget>[
-                      comment,
-                      // const Center(
-                      //   child: Text('Display Tab 1',
-                      //       style: TextStyle(
-                      //           fontSize: 22,
-                      //           fontWeight: FontWeight.bold)),
-                      // ),
-                      commentWithsp,
+                    children: [
+                      _commentList(),
+                      _commentWithNPList(),
                     ],
                   ),
-                  // const Center(
-                  //   child: Text('Display Tab 2',
-                  //       style: TextStyle(
-                  //           fontSize: 22,
-                  //           fontWeight: FontWeight.bold)),
-                  // ),
                 ),
               ],
             ),
@@ -170,8 +333,32 @@ class Tab1 extends StatelessWidget {
   }
 }
 
-class Tab2 extends StatelessWidget {
+class Tab2 extends StatefulWidget {
   const Tab2({Key? key}) : super(key: key);
+  @override
+  _Tab2 createState() => _Tab2();
+}
+
+class _Tab2 extends State<Tab2> {
+  String firstHalf = "";
+  String secondHalf = "";
+  String text =
+      'After half of all life is snapped away by Thanos, the Avengers are left scattered and divided. Now with a way to reverse the damage, the Avengers and their allies assemble once more and learn to put differences aside in order to work together and set things right. Along the way, the Avengers realize that sacrifices must be made as they prepare for the ultimate final showdown with Thanos, which will result in the heroes fighting the biggest battle they have ever faced.';
+
+  bool flag = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (text.length > 200) {
+      firstHalf = text.substring(0, 200);
+      secondHalf = text.substring(200, text.length);
+    } else {
+      firstHalf = text;
+      secondHalf = "";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,13 +366,13 @@ class Tab2 extends StatelessWidget {
         body: Column(
       children: [
         Container(
-          padding: const EdgeInsets.only(left: 10, top: 10, right: 5),
+          padding: const EdgeInsets.all(20),
           alignment: Alignment.centerLeft,
           child: Column(children: [
             Column(
               children: const [
                 Padding(
-                  padding: EdgeInsets.only(left: 5),
+                  padding: EdgeInsets.only(left: 10),
                   child: Text(
                     "plot summary",
                     textAlign: TextAlign.left,
@@ -200,24 +387,34 @@ class Tab2 extends StatelessWidget {
               ],
             ),
             Column(
-              children: const [
+              children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 5),
-                  child: ReadMoreText(
-                    'After half of all life is snapped away by Thanos, the Avengers are left scattered and '
-                    'divided. Now with a way to reverse the damage, the Avengers and their allies must '
-                    'assemble once more and learn to put differences aside in order to work together and set '
-                    'things right. Along the way, the Avengers realize that sacrifices must be made as they '
-                    'prepare for the ultimate final showdown with Thanos, which will result in the heroes '
-                    'fighting the biggest battle they have ever faced.',
-                    trimLines: 4,
-                    colorClickableText: Colors.pink,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: 'Read more',
-                    trimExpandedText: 'Show less',
-                    moreStyle:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
+                  padding: const EdgeInsets.only(top: 5),
+                  child: secondHalf.isEmpty
+                      ? Text(firstHalf)
+                      : Column(
+                          children: <Widget>[
+                            Text(flag
+                                ? (firstHalf + "...")
+                                : (firstHalf + secondHalf)),
+                            InkWell(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    flag ? "show more" : "show less",
+                                    style: const TextStyle(color: Colors.pink),
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  flag = !flag;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                 ),
               ],
             ),
@@ -252,7 +449,7 @@ class Tab2 extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: Container(
-                      color: Color.fromARGB(255, 196, 196, 196),
+                      color: const Color.fromARGB(255, 196, 196, 196),
                     ),
                   ),
                 ),
@@ -266,7 +463,7 @@ class Tab2 extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: Container(
-                      color: Color.fromARGB(255, 196, 196, 196),
+                      color: const Color.fromARGB(255, 196, 196, 196),
                     ),
                   ),
                 ),
@@ -280,7 +477,7 @@ class Tab2 extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: Container(
-                      color: Color.fromARGB(255, 196, 196, 196),
+                      color: const Color.fromARGB(255, 196, 196, 196),
                     ),
                   ),
                 ),
@@ -317,7 +514,7 @@ class Tab2 extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: Container(
-                      color: Color.fromARGB(255, 196, 196, 196),
+                      color: const Color.fromARGB(255, 196, 196, 196),
                     ),
                   ),
                 ),
@@ -331,7 +528,7 @@ class Tab2 extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: Container(
-                      color: Color.fromARGB(255, 196, 196, 196),
+                      color: const Color.fromARGB(255, 196, 196, 196),
                     ),
                   ),
                 ),
@@ -345,7 +542,7 @@ class Tab2 extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: Container(
-                      color: Color.fromARGB(255, 196, 196, 196),
+                      color: const Color.fromARGB(255, 196, 196, 196),
                     ),
                   ),
                 ),
@@ -439,346 +636,6 @@ class Tab3 extends StatelessWidget {
     );
   }
 }
-
-Widget comment = Column(children: [
-  Row(
-    children: [
-      Container(
-        padding: const EdgeInsets.only(left: 30, top: 20),
-        width: 100,
-        height: 100,
-        child: ClipRRect(
-          borderRadius: BorderRadius.zero,
-          child: Image.asset(
-            "assets/pro2.png",
-            color: null,
-            fit: BoxFit.cover,
-            width: 100.0,
-            height: 100.0,
-            colorBlendMode: BlendMode.dstATop,
-          ),
-        ),
-      ),
-      Column(
-        children: const [
-          Padding(
-            padding: EdgeInsets.only(left: 30, top: 10),
-            child: Text(
-              "Brayden cooler",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 25.0,
-                fontFamily: 'Sarala',
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Text(
-              "That's lit!!!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontFamily: 'Sarala',
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-      Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(
-              left: 100,
-              top: 10,
-            ),
-            child: Row(
-              children: [
-                const Text(
-                  '50.4 K',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontFamily: 'Sarala',
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ),
-                Column(
-                  children: const [
-                    Icon(Icons.more_vert, color: Colors.black),
-                    Icon(
-                      Icons.thumb_up,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ],
-  ),
-  Row(
-    children: [
-      Container(
-        padding: const EdgeInsets.only(left: 30, top: 20),
-        width: 100,
-        height: 100,
-        child: ClipRRect(
-          borderRadius: BorderRadius.zero,
-          child: Image.asset(
-            "assets/pro2.png",
-            color: null,
-            fit: BoxFit.cover,
-            width: 100.0,
-            height: 100.0,
-            colorBlendMode: BlendMode.dstATop,
-          ),
-        ),
-      ),
-      Column(
-        children: const [
-          Padding(
-            padding: EdgeInsets.only(left: 30, top: 10),
-            child: Text(
-              "Aaron sosick",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 25.0,
-                fontFamily: 'Sarala',
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10, left: 40),
-            child: Text(
-              "good job mavel",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontFamily: 'Sarala',
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-      Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(
-              left: 120,
-              top: 10,
-            ),
-            child: Row(
-              children: [
-                const Text(
-                  '40.8 K',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontFamily: 'Sarala',
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ),
-                Column(
-                  children: const [
-                    Icon(Icons.more_vert, color: Colors.black),
-                    Icon(
-                      Icons.thumb_up,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ],
-  ),
-]);
-
-Widget commentWithsp = Column(children: [
-  Row(
-    children: [
-      Container(
-        padding: const EdgeInsets.only(left: 30, top: 20),
-        width: 100,
-        height: 100,
-        child: ClipRRect(
-          borderRadius: BorderRadius.zero,
-          child: Image.asset(
-            "assets/pro2.png",
-            color: null,
-            fit: BoxFit.cover,
-            width: 100.0,
-            height: 100.0,
-            colorBlendMode: BlendMode.dstATop,
-          ),
-        ),
-      ),
-      Column(
-        children: const [
-          Padding(
-            padding: EdgeInsets.only(left: 30, top: 10),
-            child: Text(
-              "Brayden cooler",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 25.0,
-                fontFamily: 'Sarala',
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 20,
-              top: 10,
-            ),
-            child: Text(
-              "Why make Tony die???",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 15.0,
-                fontFamily: 'Sarala',
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-      Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(
-              left: 100,
-              top: 10,
-            ),
-            child: Row(
-              children: [
-                const Text(
-                  '50.4 K',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontFamily: 'Sarala',
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ),
-                Column(
-                  children: const [
-                    Icon(Icons.more_vert, color: Colors.black),
-                    Icon(
-                      Icons.thumb_up,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ],
-  ),
-  Row(
-    children: [
-      Container(
-        padding: const EdgeInsets.only(left: 30, top: 20),
-        width: 100,
-        height: 100,
-        child: ClipRRect(
-          borderRadius: BorderRadius.zero,
-          child: Image.asset(
-            "assets/pro2.png",
-            color: null,
-            fit: BoxFit.cover,
-            width: 100.0,
-            height: 100.0,
-            colorBlendMode: BlendMode.dstATop,
-          ),
-        ),
-      ),
-      Column(
-        children: const [
-          Padding(
-            padding: EdgeInsets.only(left: 30, top: 10),
-            child: Text(
-              "Aaron sosick",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 25.0,
-                fontFamily: 'Sarala',
-                fontWeight: FontWeight.w800,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 30,
-              top: 10,
-            ),
-            child: Text(
-              "Wanda can win Thanos",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 15.0,
-                fontFamily: 'Sarala',
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-      Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(
-              left: 100,
-              top: 10,
-            ),
-            child: Row(
-              children: [
-                const Text(
-                  '40.8 K',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontFamily: 'Sarala',
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 0, 0, 0),
-                  ),
-                ),
-                Column(
-                  children: const [
-                    Icon(Icons.more_vert, color: Colors.black),
-                    Icon(
-                      Icons.thumb_up,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ],
-  ),
-]);
 
 class mentWidget extends StatelessWidget {
   const mentWidget({Key? key}) : super(key: key);

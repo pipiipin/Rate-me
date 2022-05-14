@@ -28,25 +28,22 @@ class _ContentChoice extends State<ContentChoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: Stack(
         children: [
-          Container(
-            padding: const EdgeInsets.only(top: 50.0, left: 20.0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: TextButton(
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-          ),
           Container(
             padding: const EdgeInsets.all(20),
             child: Column(

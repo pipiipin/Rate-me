@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1090153622568",
+    "project_id": "rate-me-db2d9",
+    "storage_bucket": "rate-me-db2d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090153622568:android:90baa09b495d13c3be191d",
+        "android_client_info": {
+          "package_name": "com.example.rate_me"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090153622568-ibsm5mkvo9sknkh5b6n91og3akenimhq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmmpiT1rrW-C3vR2DxZd4rMg5FGhCfkJQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090153622568-ibsm5mkvo9sknkh5b6n91og3akenimhq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1090153622568-ae18rh49tmrd3sp1jldd5u3bt6nkbpme.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.rateMe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

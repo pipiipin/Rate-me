@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rate_me/screens/categorieresultpage.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class _CategoryScreen extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(186, 1, 32, 105),
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Center(
@@ -25,7 +26,14 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ResultScreen(genre: "Comedy"),
+                    ),
+                  );
+                },
                 child: const Text('comedy'),
               ),
               TextButton(
@@ -35,7 +43,14 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ResultScreen(genre: "Horror"),
+                    ),
+                  );
+                },
                 child: const Text('horror'),
               ),
               TextButton(
@@ -45,7 +60,15 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const ResultScreen(genre: "Romance"),
+                    ),
+                  );
+                },
                 child: const Text('romance'),
               ),
               TextButton(
@@ -55,8 +78,15 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
-                child: const Text('old-school'),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ResultScreen(genre: "Crime"),
+                    ),
+                  );
+                },
+                child: const Text('Crime'),
               ),
               TextButton(
                 style: TextButton.styleFrom(
@@ -65,7 +95,14 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ResultScreen(genre: "Drama"),
+                    ),
+                  );
+                },
                 child: const Text('drama'),
               ),
               TextButton(
@@ -75,8 +112,16 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
-                child: const Text('funny'),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const ResultScreen(genre: "Fantasy"),
+                    ),
+                  );
+                },
+                child: const Text('fantasy'),
               ),
               TextButton(
                 style: TextButton.styleFrom(
@@ -85,7 +130,14 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ResultScreen(genre: "Action"),
+                    ),
+                  );
+                },
                 child: const Text('action'),
               ),
               TextButton(
@@ -95,7 +147,15 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const ResultScreen(genre: "Science Fiction"),
+                    ),
+                  );
+                },
                 child: const Text('sci-fi'),
               ),
               TextButton(
@@ -105,7 +165,15 @@ class _CategoryScreen extends State<CategoryScreen> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const ResultScreen(genre: "Adventure"),
+                    ),
+                  );
+                },
                 child: const Text('adventure'),
               ),
               const SizedBox(

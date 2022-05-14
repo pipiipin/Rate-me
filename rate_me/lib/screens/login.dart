@@ -1,163 +1,234 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:rate_me/screens/default.dart';
 import 'package:rate_me/screens/signup.dart';
+import 'package:rate_me/screens/login.dart';
+import 'package:rate_me/screens/home.dart';
+import 'package:rate_me/screens/default.dart';
 
-class SigninScreen extends StatefulWidget {
-  const SigninScreen({Key? key}) : super(key: key);
+import 'package:rate_me/screens/content.dart';
 
-  static const routeName = '/signin-screen';
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  static const routeName = '/login-screen';
 
   @override
-  State<SigninScreen> createState() => _SigninScreen();
+  State<LoginScreen> createState() => _LoginScreen();
 }
 
-class _SigninScreen extends State<SigninScreen> {
+class _LoginScreen extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 1, 33, 105),
-      body: Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(40),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Image(
-                  image: new AssetImage("assets/logo.png"),
-                  width: 250,
-                  height: 250,
-                  fit: BoxFit.cover,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+                alignment: Alignment.centerLeft,
+              ),
+            ),
+            Image(
+              image: new AssetImage("assets/logo.png"),
+              width: 250,
+              height: 250,
+              fit: BoxFit.cover,
+            ),
+            // const Text(
+            //   'Log in',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 40,
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 50,
+            // ),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      "username",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your username';
+                      }
+                      return null;
+                    },
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      "password",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: passwordController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                    maxLines: 1,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      signIn();
+                      print("press");
+                      FirebaseAuth.instance
+                          .authStateChanges()
+                          .listen((User? user) {
+                        if (user == null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
+                          print('User is currently signed out!');
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DefaultScreen(),
+                            ),
+                          );
+                          print('User is signed in!');
+                        }
+                      });
+                      // StreamBuilder<User?>(
+                      //   stream: FirebaseAuth.instance.authStateChanges(),
+                      //   builder: (context, snapshot) {
+                      //     if (snapshot.hasData) {
+                      //       print("loginsuccess");
+                      //       return ContentChoice();
+                      //     } else {
+                      //       print("loginnotsuccess");
+                      //       return LoginScreen();
+                      //     }
+                      //   });
+                      if (_formKey.currentState!.validate()) {}
+                    },
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                        const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Sign in',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 1, 33, 105),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          "email",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                          textAlign: TextAlign.left,
+                      const Text(
+                        'Not registered yet?',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your username';
-                          }
-                          return null;
-                        },
-                        maxLines: 1,
-                        decoration: const InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          "password",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          return null;
-                        },
-                        maxLines: 1,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          fillColor: Colors.white,
-                          filled: true,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      ElevatedButton(
+                      TextButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const DefaultScreen()));}
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignupScreen(),
+                            ),
+                          );
                         },
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.fromLTRB(60, 10, 60, 10),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.white),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                          ),
-                        ),
-                        child: const Text(
-                          'Sign in',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 1, 33, 105),
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      // const SizedBox(
-                      //   height: 20,
-                      // ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Not registered yet?',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignupScreen(),
-                                ),
-                              );
-                            },
-                            child: const Text('Create an account'),
-                          ),
-                        ],
+                        child: const Text('Create an account'),
                       ),
                     ],
                   ),
-                )
-              ],
-            ),
-          ),
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
       ),
+    );
+  }
+
+  Future signIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
     );
   }
 }
