@@ -13,20 +13,14 @@ class _CategoryScreen extends State<CategoryScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(186, 1, 32, 105),
       body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
+        width: double.maxFinite,
+        height: double.maxFinite,
         child: Center(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                onPressed: () {
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -34,16 +28,13 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('comedy'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+                child: const Text(
+                  'comedy',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {
+              ),
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -51,16 +42,13 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('horror'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+                child: const Text(
+                  'horror',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {
+              ),
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -69,16 +57,13 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('romance'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+                child: const Text(
+                  'romance',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {
+              ),
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -86,16 +71,13 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('Crime'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+                child: const Text(
+                  'Crime',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {
+              ),
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -103,16 +85,13 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('drama'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+                child: const Text(
+                  'drama',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {
+              ),
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -121,16 +100,13 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('fantasy'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+                child: const Text(
+                  'fantasy',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {
+              ),
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -138,16 +114,13 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('action'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+                child: const Text(
+                  'action',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {
+              ),
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -156,16 +129,13 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('sci-fi'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+                child: const Text(
+                  'sci-fi',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {
+              ),
+              InkWell(
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -174,60 +144,42 @@ class _CategoryScreen extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: const Text('adventure'),
-              ),
-              const SizedBox(
-                height: 20,
+                child: const Text(
+                  'adventure',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
               ),
               Container(
                 height: 5.0,
                 color: const Color.fromARGB(255, 196, 196, 196),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+              InkWell(
+                onTap: () {},
+                child: const Text(
+                  '2022',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {},
-                child: const Text('2022'),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+              InkWell(
+                onTap: () {},
+                child: const Text(
+                  '2021',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {},
-                child: const Text('2021'),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+              InkWell(
+                onTap: () {},
+                child: const Text(
+                  '2020',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {},
-                child: const Text('2020'),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                  ),
+              InkWell(
+                onTap: () {},
+                child: const Text(
+                  '2019',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
-                onPressed: () {},
-                child: const Text('2019'),
-              ),
-              const SizedBox(
-                height: 10,
               ),
               CircleAvatar(
                 backgroundColor: Colors.white,

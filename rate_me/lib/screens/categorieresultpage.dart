@@ -30,13 +30,7 @@ class _ResultScreen extends State<ResultScreen> {
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ResultList(genre: widget.genre),
-            ],
-          ),
-        ),
+        child: ResultList(genre: widget.genre),
       ),
     );
   }
@@ -105,12 +99,13 @@ class _ResultListState extends State<ResultList> {
     });
   }
 
-  _buildList() {
+  @override
+  Widget build(BuildContext context) {
     return GridView.count(
       mainAxisSpacing: 5,
       crossAxisSpacing: 20,
       crossAxisCount: 3,
-      childAspectRatio: (2.8 / 5),
+      childAspectRatio: (2.7 / 5),
       children: List.generate(10, (index) {
         String path =
             'https://image.tmdb.org/t/p/w200' + movie[index]['poster_path'];
@@ -148,7 +143,7 @@ class _ResultListState extends State<ResultList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: 80,
+                        width: MediaQuery.of(context).size.width / 6,
                         child: Text(
                           movie[index]['title'],
                           overflow: TextOverflow.ellipsis,
@@ -178,14 +173,6 @@ class _ResultListState extends State<ResultList> {
           ),
         );
       }),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 18,
-      children: _buildList(),
     );
   }
 }

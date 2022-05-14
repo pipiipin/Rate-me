@@ -62,12 +62,13 @@ class _Top100ListState extends State<Top100List> {
     });
   }
 
-  _buildTop100List() {
+  @override
+  Widget build(BuildContext context) {
     return GridView.count(
       mainAxisSpacing: 5,
       crossAxisSpacing: 20,
       crossAxisCount: 3,
-      childAspectRatio: (2.8/5),
+      childAspectRatio: (2.7 / 5),
       children: List.generate(
         10,
         (index) {
@@ -106,7 +107,7 @@ class _Top100ListState extends State<Top100List> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: 80,
+                          width: MediaQuery.of(context).size.width/6,
                           child: Text(
                             movie[index]['title'],
                             overflow: TextOverflow.ellipsis,
@@ -138,10 +139,5 @@ class _Top100ListState extends State<Top100List> {
         },
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildTop100List();
   }
 }

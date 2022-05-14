@@ -22,7 +22,7 @@ class _YourListScreen extends State<YourListScreen> {
 
   loadtrendingmovie() async {
     TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
-        logConfig: ConfigLogger(
+        logConfig: const ConfigLogger(
           showLogs: true,
           showErrorLogs: true,
         ));
@@ -81,9 +81,9 @@ class _YourListScreen extends State<YourListScreen> {
                       ),
                     ),
                     Expanded(
-                      flex: 4,
+                      flex: 5,
                       child: Container(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 10, 20),
+                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -109,7 +109,7 @@ class _YourListScreen extends State<YourListScreen> {
                                 Text(
                                   topmovie[index]['original_language']
                                       .toString(),
-                                  style: TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                               ],
                             ),
@@ -119,16 +119,17 @@ class _YourListScreen extends State<YourListScreen> {
                             Row(
                               // ignore: prefer_const_literals_to_create_immutables
                               children: [
-                                Text(
+                                const Text(
                                   "Release date :",
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 14),
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Text(
                                   (topmovie[index]["release_date"]).toString(),
-                                  style: TextStyle(fontSize: 12),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 14),
                                 ),
                               ],
                             )
@@ -139,7 +140,7 @@ class _YourListScreen extends State<YourListScreen> {
                     Expanded(
                       flex: 2,
                       child: Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.only(right: 10),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,7 +155,7 @@ class _YourListScreen extends State<YourListScreen> {
                                   ),
                                   Text(
                                     topmovie[index]['vote_average'].toString(),
-                                    style: TextStyle(fontSize: 20),
+                                    style: const TextStyle(fontSize: 20),
                                   ),
                                 ],
                               ),
