@@ -34,57 +34,60 @@ class _TabBarPageState extends State<TabBarPage>
   @override
   build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height / 1.05,
       child: Column(
         children: [
           Column(
             children: [
-              TabBar(
-                unselectedLabelColor: const Color.fromARGB(255, 189, 189, 189),
-                indicatorSize: TabBarIndicatorSize.label,
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.redAccent,
+              Center(
+                child: TabBar(
+                  indicatorColor: Colors.white,
+                  unselectedLabelColor: const Color.fromARGB(255, 189, 189, 189),
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Colors.redAccent,
+                  ),
+                  controller: tabController,
+                  tabs: [
+                    Tab(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border:
+                                Border.all(color: Colors.redAccent, width: 1)),
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Text("Comment"),
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border:
+                                Border.all(color: Colors.redAccent, width: 1)),
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Text("Description"),
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border:
+                                Border.all(color: Colors.redAccent, width: 1)),
+                        child: const Align(
+                          alignment: Alignment.center,
+                          child: Text("Watch now"),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                controller: tabController,
-                tabs: [
-                  Tab(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border:
-                              Border.all(color: Colors.redAccent, width: 1)),
-                      child: const Align(
-                        alignment: Alignment.center,
-                        child: Text("Comment"),
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border:
-                              Border.all(color: Colors.redAccent, width: 1)),
-                      child: const Align(
-                        alignment: Alignment.center,
-                        child: Text("Description"),
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border:
-                              Border.all(color: Colors.redAccent, width: 1)),
-                      child: const Align(
-                        alignment: Alignment.center,
-                        child: Text("Watch now"),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
@@ -97,7 +100,7 @@ class _TabBarPageState extends State<TabBarPage>
                 Tab3(),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -117,28 +120,37 @@ class _Tab1 extends State<Tab1> {
     'Aaron Sosick',
     'Breyden Cooler',
     'Aaron Sosick',
+    'Breyden Cooler',
+    'Aaron Sosick',
+    'Breyden Cooler',
+    'Aaron Sosick',
+    'Breyden Cooler',
+    'Aaron Sosick',
+    'Breyden Cooler',
+    'Aaron Sosick',
   ];
 
   _commentList() {
-    return Expanded(
-      child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: users.length,
-          itemBuilder: (context, index) {
-            return Card(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+    return GridView.count(
+      padding: const EdgeInsets.all(0),
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 5,
+      crossAxisCount: 1,
+      childAspectRatio: (4 / 1),
+      children: List.generate(
+        users.length,
+        (index) {
+          return Card(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: CircleAvatar(
+                      radius: 80,
                       child: Image.asset(
                         "assets/pro2.png",
                         color: null,
@@ -146,7 +158,10 @@ class _Tab1 extends State<Tab1> {
                         colorBlendMode: BlendMode.dstATop,
                       ),
                     ),
-                    Column(
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -174,7 +189,10 @@ class _Tab1 extends State<Tab1> {
                         ),
                       ],
                     ),
-                    Column(
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -198,34 +216,37 @@ class _Tab1 extends State<Tab1> {
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  )
+                ],
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 
   _commentWithNPList() {
-    return Expanded(
-      child: ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: users.length,
-          itemBuilder: (context, index) {
-            return Card(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
+    return GridView.count(
+      padding: const EdgeInsets.all(0),
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 5,
+      crossAxisCount: 1,
+      childAspectRatio: (4 / 1),
+      children: List.generate(
+        users.length,
+        (index) {
+          return Card(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: CircleAvatar(
+                      radius: 80,
                       child: Image.asset(
                         "assets/pro2.png",
                         color: null,
@@ -233,7 +254,10 @@ class _Tab1 extends State<Tab1> {
                         colorBlendMode: BlendMode.dstATop,
                       ),
                     ),
-                    Column(
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -261,7 +285,10 @@ class _Tab1 extends State<Tab1> {
                         ),
                       ],
                     ),
-                    Column(
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -285,49 +312,52 @@ class _Tab1 extends State<Tab1> {
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  )
+                ],
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          DefaultTabController(
-            length: 2, // length of tabs
-            initialIndex: 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const TabBar(
-                  labelColor: Colors.green,
-                  unselectedLabelColor: Colors.black,
-                  tabs: [
-                    Tab(text: 'No Spoiled'),
-                    Tab(text: 'Spoiled'),
-                  ],
-                ),
-                Container(
-                  height: 600,
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          top: BorderSide(color: Colors.grey, width: 0.5))),
-                  child: TabBarView(
-                    children: [
-                      _commentList(),
-                      _commentWithNPList(),
-                    ],
-                  ),
-                ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.red,
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      body: DefaultTabController(
+        length: 2, // length of tabs
+        initialIndex: 0,
+        child: Column(
+          children: [
+            const TabBar(
+              labelColor: Colors.green,
+              unselectedLabelColor: Colors.black,
+              tabs: [
+                Tab(text: 'No Spoiled'),
+                Tab(text: 'Spoiled'),
               ],
             ),
-          ),
-        ],
+            Container(
+              height: MediaQuery.of(context).size.height / 1.3,
+              decoration: const BoxDecoration(
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 0.5))),
+              child: TabBarView(
+                children: [
+                  _commentList(),
+                  _commentWithNPList(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -360,193 +390,142 @@ class _Tab2 extends State<Tab2> {
     }
   }
 
+  _buildCCList() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return Card(
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: 10,
+            ),
+            width: 100.0,
+            height: 120.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5.0),
+              child: Container(
+                color: const Color.fromARGB(255, 196, 196, 196),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _buildDirectorList() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return Card(
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: 10,
+            ),
+            width: 100.0,
+            height: 120.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5.0),
+              child: Container(
+                color: const Color.fromARGB(255, 196, 196, 196),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
       children: [
         Container(
+          color: Colors.white,
           padding: const EdgeInsets.all(20),
-          alignment: Alignment.centerLeft,
-          child: Column(children: [
-            Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    "plot summary",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontFamily: 'Sarala',
-                      fontWeight: FontWeight.w400,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              ],
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text(
+              "plot summary",
+              style: TextStyle(
+                fontSize: 22.0,
+                fontFamily: 'Sarala',
+                fontWeight: FontWeight.w400,
+                color: Colors.red,
+              ),
             ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: secondHalf.isEmpty
-                      ? Text(firstHalf)
-                      : Column(
-                          children: <Widget>[
-                            Text(flag
-                                ? (firstHalf + "...")
-                                : (firstHalf + secondHalf)),
-                            InkWell(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    flag ? "show more" : "show less",
-                                    style: const TextStyle(color: Colors.pink),
-                                  ),
-                                ],
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: secondHalf.isEmpty
+                  ? Text(firstHalf)
+                  : Column(
+                      children: <Widget>[
+                        Text(flag
+                            ? (firstHalf + "...")
+                            : (firstHalf + secondHalf)),
+                        InkWell(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                flag ? "show more" : "show less",
+                                style: const TextStyle(color: Colors.pink),
                               ),
-                              onTap: () {
-                                setState(() {
-                                  flag = !flag;
-                                });
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
+                          onTap: () {
+                            setState(() {
+                              flag = !flag;
+                            });
+                          },
                         ),
-                ),
-              ],
+                      ],
+                    ),
             ),
-            Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    "cast & crew",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontFamily: 'Sarala',
-                      fontWeight: FontWeight.w400,
-                      color: Colors.red,
-                    ),
-                  ),
+            const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text(
+                "cast & crew",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 22.0,
+                  fontFamily: 'Sarala',
+                  fontWeight: FontWeight.w400,
+                  color: Colors.red,
                 ),
-              ],
+              ),
             ),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                  ),
-                  width: 100.0,
-                  height: 120.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Container(
-                      color: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 10, left: 10),
-                  width: 100.0,
-                  height: 120.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Container(
-                      color: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 10, left: 10),
-                  width: 100.0,
-                  height: 120.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Container(
-                      color: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                  ),
-                ),
-              ],
+            Container(
+              height: 140,
+              color: Colors.white,
+              child: (_buildCCList()),
             ),
-            Column(
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(top: 15),
-                  child: Text(
-                    "Director",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontFamily: 'Sarala',
-                      fontWeight: FontWeight.w400,
-                      color: Colors.red,
-                    ),
-                  ),
+            const Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text(
+                "Director",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 22.0,
+                  fontFamily: 'Sarala',
+                  fontWeight: FontWeight.w400,
+                  color: Colors.red,
                 ),
-              ],
+              ),
             ),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                  ),
-                  width: 100.0,
-                  height: 120.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Container(
-                      color: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 10, left: 10),
-                  width: 100.0,
-                  height: 120.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Container(
-                      color: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 10, left: 10),
-                  width: 100.0,
-                  height: 120.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Container(
-                      color: const Color.fromARGB(255, 196, 196, 196),
-                    ),
-                  ),
-                ),
-              ],
+            Container(
+              height: 140,
+              color: Colors.white,
+              child: (_buildDirectorList()),
             ),
           ]),
         ),
@@ -558,99 +537,62 @@ class _Tab2 extends State<Tab2> {
 class Tab3 extends StatelessWidget {
   const Tab3({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(children: [
-        Column(children: [
-          Container(
-            padding: const EdgeInsets.only(left: 20, top: 20),
-            width: 200,
-            height: 200,
-            child: ClipRRect(
-              borderRadius: BorderRadius.zero,
-              child: Image.asset(
-                "assets/netflix.png",
-                color: null,
-                fit: BoxFit.cover,
-                width: 69.0,
-                height: 69.0,
-                colorBlendMode: BlendMode.dstATop,
+  _buildWatchList() {
+    return GridView.count(
+      padding: const EdgeInsets.all(0),
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 5,
+      crossAxisCount: 3,
+      childAspectRatio: (5 / 6),
+      children: List.generate(
+        8,
+        (index) {
+          return Card(
+            child: Container(
+              child: Column(
+                children: [
+                  Container(
+                    color: Colors.white,
+                    width: 100,
+                    height: 100,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.zero,
+                      child: Image.asset(
+                        "assets/netflix.png",
+                        fit: BoxFit.cover,
+                        colorBlendMode: BlendMode.dstATop,
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Text(
+                      "Netflix",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontFamily: 'Sarala',
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-          Column(
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(top: 10, left: 20),
-                child: Text(
-                  "Netflix",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontFamily: 'Sarala',
-                    fontWeight: FontWeight.w800,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ]),
-        Column(children: [
-          Container(
-            padding: const EdgeInsets.only(left: 20, top: 20),
-            width: 200,
-            height: 200,
-            child: ClipRRect(
-              borderRadius: BorderRadius.zero,
-              child: Image.asset(
-                "assets/disney.png",
-                color: null,
-                fit: BoxFit.cover,
-                width: 69.0,
-                height: 69.0,
-                colorBlendMode: BlendMode.dstATop,
-              ),
-            ),
-          ),
-          Column(
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(top: 10, left: 20),
-                child: Text(
-                  "Disney Plus",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontFamily: 'Sarala',
-                    fontWeight: FontWeight.w800,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ]),
-      ]),
-    );
-  }
-}
-
-class mentWidget extends StatelessWidget {
-  const mentWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed code here!
+          );
         },
-        backgroundColor: Colors.red,
-        child: const Icon(Icons.add),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Container(
+            height: MediaQuery.of(context).size.height / 1,
+            color: Colors.white,
+            padding: const EdgeInsets.all(20),
+            child: _buildWatchList()));
   }
 }
