@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rate_me/components/profile_pic.dart';
 
 class EditScreen extends StatelessWidget {
   const EditScreen({Key? key}) : super(key: key);
@@ -22,10 +23,7 @@ class EditScreen extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            CircleAvatar(
-              radius: 80,
-              backgroundImage: AssetImage("assets/pro2.png"),
-            ),
+            ProfilePic(),
             _TextEdit(),
           ],
         ),
