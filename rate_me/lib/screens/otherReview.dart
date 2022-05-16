@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
 
 class OtherReview extends StatefulWidget {
   const OtherReview({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class _OtherReviewState extends State<OtherReview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 30,
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: GestureDetector(
@@ -25,35 +27,27 @@ class _OtherReviewState extends State<OtherReview> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-          physics: const ScrollPhysics(),
-          child: Column(
-            children: [
-              Row(
-                children: const [
-                  SizedBox(
-                    width: 50,
-                  ),
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage("assets/pro2.png"),
-                  ),
-                  SizedBox(
-                    width: 70,
-                  ),
-                  Text(
-                    'Aaron sosick',
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              CircleAvatar(
+                radius: 60,
+                backgroundImage: AssetImage("assets/pro2.png"),
               ),
-              CommentProfile(),
+              Text(
+                'Aaron sosick',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black,
+                ),
+              ),
             ],
           ),
-          ),
+          const CommentProfile(),
+        ],
+      ),
     );
   }
 }
@@ -78,39 +72,33 @@ class _CommentProfileState extends State<CommentProfile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _commentList(),
+      child: _reviewList(),
     );
   }
 
-  _commentList() {
+  _reviewList() {
     return Expanded(
-      child: ListView.builder(
-          shrinkWrap: true,
-          //physics: const NeverScrollableScrollPhysics(),
-          itemCount: movies.length,
-          itemBuilder: (context, index) {
-            return Card(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(20),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: ListView.builder(
+            shrinkWrap: true,
+            //physics: const NeverScrollableScrollPhysics(),
+            itemCount: movies.length,
+            itemBuilder: (context, index,) {
+              return Card(
+                color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      width: 80,
-                      height: 100,
+                      width: 110,
+                      height: 150,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
-                      child: Container(
-                        width: double.maxFinite,
-                        height: 500,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: new AssetImage("assets/avenger.png"),
-                              fit: BoxFit.cover),
-                        ),
-                      ),
+                      child: Image(
+                          image: new AssetImage("assets/poster.jpg"),
+                          fit: BoxFit.cover),
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -145,30 +133,33 @@ class _CommentProfileState extends State<CommentProfile> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         const Icon(Icons.more_vert, color: Colors.black),
-                        Row(
-                          children: const [
-                            Text(
-                              '50.4 K',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                fontFamily: 'Sarala',
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                            ),
-                            Icon(
+                        LikeButton(
+                          size: 30,
+                          circleColor: const CircleColor(
+                              start: Colors.yellow, end: Colors.amber),
+                          bubblesColor:  const BubblesColor(
+                            dotPrimaryColor: Colors.yellow,
+                            dotSecondaryColor: Colors.amber,
+                          ),
+                          likeBuilder: (bool isLiked) {
+                            return Icon(
                               Icons.thumb_up,
-                            )
-                          ],
+                              color: isLiked
+                                  ? Colors.amber
+                                  : Colors.grey,
+                              size: 30,
+                            );
+                          },
+                          likeCount: 0,
+                          
                         ),
                       ],
                     ),
                   ],
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+      ),
     );
   }
 }
