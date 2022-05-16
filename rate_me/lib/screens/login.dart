@@ -1,13 +1,8 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rate_me/screens/signup.dart';
-import 'package:rate_me/screens/login.dart';
 import 'package:rate_me/screens/home.dart';
 import 'package:rate_me/screens/default.dart';
-
-import 'package:rate_me/screens/content.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -35,24 +30,30 @@ class _LoginScreen extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 1, 33, 105),
+      appBar: AppBar(
+        toolbarHeight: 30,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
-                alignment: Alignment.centerLeft,
-              ),
-            ),
             Image(
               image: new AssetImage("assets/logo.png"),
-              width: 250,
-              height: 250,
+              width: MediaQuery.of(context).size.width/2,
+              height: MediaQuery.of(context).size.width/2,
               fit: BoxFit.cover,
             ),
             // const Text(
@@ -72,8 +73,8 @@ class _LoginScreen extends State<LoginScreen> {
                   const SizedBox(
                     width: double.infinity,
                     child: Text(
-                      "username",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      "email",
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -104,7 +105,7 @@ class _LoginScreen extends State<LoginScreen> {
                     width: double.infinity,
                     child: Text(
                       "password",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.white, fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -189,9 +190,6 @@ class _LoginScreen extends State<LoginScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

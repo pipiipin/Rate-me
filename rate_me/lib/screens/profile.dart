@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rate_me/screens/editPro.dart';
 import 'package:rate_me/screens/history.dart';
 import 'package:rate_me/screens/lastest.dart';
 import 'package:rate_me/screens/login.dart';
@@ -77,10 +78,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     flex: 3,
                     child: InkWell(
                       onTap: () {
-                        // Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //             builder: (context) => const EditScreen()));
+                        Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const EditScreen()));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
