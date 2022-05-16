@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:rate_me/components/profile_pic.dart';
 
 class EditScreen extends StatelessWidget {
   const EditScreen({Key? key}) : super(key: key);
@@ -10,30 +11,22 @@ class EditScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 40),
-            child: Column(
-              children: const [
-                SizedBox(
-                  height: 20,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text(
+                'Edit Profile',
+                style: TextStyle(
+                  fontSize: 40,
+                  color: Colors.red,
                 ),
-                Text(
-                  'Edit Profile',
-                  style: TextStyle(
-                    fontSize: 40,
-                    color: Colors.red,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                CircleAvatar(
-                  radius: 80,
-                  backgroundImage: AssetImage("assets/pro2.png"),
-                ),
-                _TextEdit(),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              ProfilePic(),
+              _TextEdit(),
+            ],
           ),
         ));
   }

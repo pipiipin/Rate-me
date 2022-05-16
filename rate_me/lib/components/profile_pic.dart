@@ -10,7 +10,7 @@ class ProfilePic extends StatefulWidget {
 class _profileState extends State<ProfilePic> {
   @override
   Widget build(BuildContext context) {
-    final user = UserPreferences.myUser;
+    const user = UserPreferences.myUser;
     return Center(
       child: ProfileWidget(
         imagePath: user.imagePath,
@@ -111,7 +111,7 @@ class User {
 class UserPreferences {
   static const myUser = User(
     imagePath:
-        'assets/pro2.png'
-        //'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
+        // "assets/pro2.png"
+        "https://cdn-icons-png.flaticon.com/512/219/219983.png"
   );
 }
