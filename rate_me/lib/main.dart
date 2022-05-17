@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:rate_me/screens/default.dart';
 import 'package:rate_me/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:rate_me/components/bottombar.dart';
 import 'package:rate_me/screens/login.dart';
-import 'package:rate_me/screens/movie.dart';
 import 'package:rate_me/screens/signup.dart';
 import 'package:rate_me/screens/content.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DefaultScreen(),
+      home: const IntroScreen(),
       routes: {
         SignupScreen.routeName: (context) => const SignupScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:readmore/readmore.dart';
+import 'package:rate_me/components/comment.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:rate_me/screens/otherReview.dart';
+import 'package:like_button/like_button.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 
 class TabBarPage extends StatefulWidget {
@@ -155,13 +158,21 @@ class _Tab1 extends State<Tab1> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: CircleAvatar(
-                      radius: 80,
-                      child: Image.asset(
-                        "assets/pro2.png",
-                        color: null,
-                        fit: BoxFit.cover,
-                        colorBlendMode: BlendMode.dstATop,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const OtherReview()));
+                      },
+                      child: CircleAvatar(
+                        radius: 80,
+                        child: Image.asset(
+                          "assets/pro2.png",
+                          color: null,
+                          fit: BoxFit.cover,
+                          colorBlendMode: BlendMode.dstATop,
+                        ),
                       ),
                     ),
                   ),
@@ -171,15 +182,23 @@ class _Tab1 extends State<Tab1> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          users[index],
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 25.0,
-                            fontFamily: 'Sarala',
-                            fontWeight: FontWeight.w800,
-                            color: Colors.black,
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const OtherReview()));
+                          },
+                          child: Text(
+                            users[index],
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 25.0,
+                              fontFamily: 'Sarala',
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         const Text(
@@ -203,22 +222,22 @@ class _Tab1 extends State<Tab1> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         const Icon(Icons.more_vert, color: Colors.black),
-                        Row(
-                          children: const [
-                            Text(
-                              '50.4 K',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                fontFamily: 'Sarala',
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                            ),
-                            Icon(
+                        LikeButton(
+                          size: 30,
+                          circleColor: const CircleColor(
+                              start: Colors.yellow, end: Colors.amber),
+                          bubblesColor: const BubblesColor(
+                            dotPrimaryColor: Colors.yellow,
+                            dotSecondaryColor: Colors.amber,
+                          ),
+                          likeBuilder: (bool isLiked) {
+                            return Icon(
                               Icons.thumb_up,
-                            )
-                          ],
+                              color: isLiked ? Colors.amber : Colors.grey,
+                              size: 30,
+                            );
+                          },
+                          likeCount: 0,
                         ),
                       ],
                     ),
@@ -251,13 +270,21 @@ class _Tab1 extends State<Tab1> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: CircleAvatar(
-                      radius: 80,
-                      child: Image.asset(
-                        "assets/pro2.png",
-                        color: null,
-                        fit: BoxFit.cover,
-                        colorBlendMode: BlendMode.dstATop,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const OtherReview()));
+                      },
+                      child: CircleAvatar(
+                        radius: 80,
+                        child: Image.asset(
+                          "assets/pro2.png",
+                          color: null,
+                          fit: BoxFit.cover,
+                          colorBlendMode: BlendMode.dstATop,
+                        ),
                       ),
                     ),
                   ),
@@ -267,15 +294,23 @@ class _Tab1 extends State<Tab1> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          users[index],
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 25.0,
-                            fontFamily: 'Sarala',
-                            fontWeight: FontWeight.w800,
-                            color: Colors.black,
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const OtherReview()));
+                          },
+                          child: Text(
+                            users[index],
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 25.0,
+                              fontFamily: 'Sarala',
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                         const Text(
@@ -299,22 +334,25 @@ class _Tab1 extends State<Tab1> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         const Icon(Icons.more_vert, color: Colors.black),
-                        Row(
-                          children: const [
-                            Text(
-                              '50.4 K',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                fontFamily: 'Sarala',
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                            ),
-                            Icon(
+                        LikeButton(
+                          size: 30,
+                          circleColor: const CircleColor(
+                              start: Colors.yellow, end: Colors.amber),
+                          bubblesColor:  const BubblesColor(
+                            dotPrimaryColor: Colors.yellow,
+                            dotSecondaryColor: Colors.amber,
+                          ),
+                          likeBuilder: (bool isLiked) {
+                            return Icon(
                               Icons.thumb_up,
-                            )
-                          ],
+                              color: isLiked
+                                  ? Colors.amber
+                                  : Colors.grey,
+                              size: 30,
+                            );
+                          },
+                          likeCount: 0,
+                          
                         ),
                       ],
                     ),
@@ -328,13 +366,26 @@ class _Tab1 extends State<Tab1> {
     );
   }
 
+  _displayDialog(BuildContext context) {
+    showAnimatedDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return const CommentScreen();
+      },
+      animationType: DialogTransitionType.sizeFade,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _displayDialog(context);
+        },
         backgroundColor: Colors.red,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: DefaultTabController(

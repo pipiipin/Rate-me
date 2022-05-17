@@ -6,11 +6,6 @@ import 'package:rate_me/components/new_movies.dart';
 import 'package:rate_me/components/top10_movies.dart';
 import 'package:rate_me/components/comingsoon.dart';
 import 'package:rate_me/components/category.dart';
-import '../components/movie.dart';
-import '../service/movie_service.dart';
-import '../service/movies_exception.dart';
-import 'dart:ui';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

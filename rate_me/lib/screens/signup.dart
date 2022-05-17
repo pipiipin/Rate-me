@@ -21,34 +21,37 @@ class _SignupScreen extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(20),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        toolbarHeight: 30,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 30,right: 30),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                alignment: Alignment.centerLeft,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: const Text(
-                "REGISTER",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 1, 33, 105),
-                    fontSize: 36),
-                textAlign: TextAlign.left,
-              ),
+            const Text(
+              "REGISTER",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 1, 33, 105),
+                  fontSize: 36),
             ),
             const SizedBox(
-              height: 60,
+              height: 5,
+            ),
+            const CircleAvatar(
+              radius: 80,
+              backgroundImage: AssetImage("assets/pro2.png"),
             ),
             Form(
               key: _formKey,
@@ -59,14 +62,15 @@ class _SignupScreen extends State<SignupScreen> {
                     child: Text(
                       "username",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 1, 33, 105), fontSize: 20),
+                          color: Color.fromARGB(255, 1, 33, 105), fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
+                    style: const TextStyle(fontSize: 16),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your username';
@@ -74,39 +78,8 @@ class _SignupScreen extends State<SignupScreen> {
                       return null;
                     },
                     maxLines: 1,
-                    decoration: const InputDecoration(
-                      fillColor: Color.fromARGB(255, 196, 196, 196),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      "email",
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 1, 33, 105), fontSize: 20),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: emailController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      return null;
-                    },
-                    maxLines: 1,
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(5),
                       fillColor: const Color.fromARGB(255, 196, 196, 196),
                       filled: true,
                       border: OutlineInputBorder(
@@ -116,21 +89,57 @@ class _SignupScreen extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 10,
+                  ),
+                  const SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      "email",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 1, 33, 105), fontSize: 16),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  TextFormField(
+                    style: const TextStyle(fontSize: 16),
+                    controller: emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(5),
+                      fillColor: const Color.fromARGB(255, 196, 196, 196),
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   const SizedBox(
                     width: double.infinity,
                     child: Text(
                       "password",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 1, 33, 105), fontSize: 20),
+                          color: Color.fromARGB(255, 1, 33, 105), fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
+                    style: const TextStyle(fontSize: 16),
                     controller: passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -143,7 +152,8 @@ class _SignupScreen extends State<SignupScreen> {
                     maxLines: 1,
                     obscureText: true,
                     decoration: InputDecoration(
-                      fillColor: Color.fromARGB(255, 196, 196, 196),
+                      contentPadding: const EdgeInsets.all(5),
+                      fillColor: const Color.fromARGB(255, 196, 196, 196),
                       filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -152,21 +162,22 @@ class _SignupScreen extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   const SizedBox(
                     width: double.infinity,
                     child: Text(
                       "re-enter password",
                       style: TextStyle(
-                          color: Color.fromARGB(255, 1, 33, 105), fontSize: 20),
+                          color: Color.fromARGB(255, 1, 33, 105), fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
+                    style: const TextStyle(fontSize: 16),
                     controller: passwordconController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -181,6 +192,7 @@ class _SignupScreen extends State<SignupScreen> {
                     maxLines: 1,
                     obscureText: true,
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(5),
                       fillColor: const Color.fromARGB(255, 196, 196, 196),
                       filled: true,
                       border: OutlineInputBorder(
@@ -193,9 +205,10 @@ class _SignupScreen extends State<SignupScreen> {
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 10,
             ),
             Container(
+              
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: () {
@@ -223,7 +236,7 @@ class _SignupScreen extends State<SignupScreen> {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             Container(
               alignment: Alignment.centerRight,
