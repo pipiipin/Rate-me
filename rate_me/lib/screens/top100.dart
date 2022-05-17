@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:rate_me/screens/movie.dart';
 
 class Top100Screen extends StatefulWidget {
   const Top100Screen({Key? key}) : super(key: key);
@@ -70,13 +71,13 @@ class _Top100ListState extends State<Top100List> {
       crossAxisCount: 3,
       childAspectRatio: (2.7 / 5),
       children: List.generate(
-        10,
+        20,
         (index) {
           String path =
               'https://image.tmdb.org/t/p/w200' + movie[index]['poster_path'];
 
           String score = movie[index]['vote_average'].round().toString() + "%";
-
+          int movieid = movie[index]['id'];
           return Card(
             margin: const EdgeInsets.only(top: 10),
             shape: RoundedRectangleBorder(
@@ -84,10 +85,12 @@ class _Top100ListState extends State<Top100List> {
             ),
             color: Colors.white,
             child: InkWell(
-              // onTap: () {
-              //   Navigator.push(context,
-              //       MaterialPageRoute(builder: (context) => const YourListScreen()));
-              // },
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MovieScreen(movieid: movieid)));
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -107,7 +110,7 @@ class _Top100ListState extends State<Top100List> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: MediaQuery.of(context).size.width/6,
+                          width: MediaQuery.of(context).size.width / 6,
                           child: Text(
                             movie[index]['title'],
                             overflow: TextOverflow.ellipsis,

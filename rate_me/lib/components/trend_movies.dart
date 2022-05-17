@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'dart:ui';
 import '../service/text.dart';
+import 'package:rate_me/screens/movie.dart';
 
 class trendMovies extends StatefulWidget {
   const trendMovies({Key? key}) : super(key: key);
@@ -79,19 +80,28 @@ class _trendMoviesState extends State<trendMovies> {
             borderRadius: BorderRadius.circular(10),
           ),
           color: Colors.black,
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  'https://image.tmdb.org/t/p/w200' +
-                      trendingmovie[index]['poster_path'],
-                  width: 100,
-                  height: 158,
-                  fit: BoxFit.cover,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MovieScreen(movieid: trendingmovie[index]['id'])));
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    'https://image.tmdb.org/t/p/w200' +
+                        trendingmovie[index]['poster_path'],
+                    width: 100,
+                    height: 158,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
