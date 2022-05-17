@@ -7,6 +7,7 @@ import 'package:tmdb_api/tmdb_api.dart';
 import 'movie.dart';
 import '../service/movie_service.dart';
 import '../service/movies_exception.dart';
+import 'package:rate_me/screens/movie.dart';
 
 class newMovies extends StatefulWidget {
   const newMovies({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class _newMoviesState extends State<newMovies> {
         ));
 
     Map newresult = await tmdbWithCustomLogs.v3.movies.getPopular();
-  
+
     setState(() {
       newmovie = newresult['results'];
     });
@@ -84,19 +85,28 @@ class _newMoviesState extends State<newMovies> {
             borderRadius: BorderRadius.circular(10),
           ),
           color: Colors.black,
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  'https://image.tmdb.org/t/p/w200' +
-                      newmovie[index]['poster_path'],
-                  width: 100,
-                  height: 158,
-                  fit: BoxFit.cover,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MovieScreen(movieid: newmovie[index]['id'])));
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    'https://image.tmdb.org/t/p/w200' +
+                        newmovie[index]['poster_path'],
+                    width: 100,
+                    height: 158,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

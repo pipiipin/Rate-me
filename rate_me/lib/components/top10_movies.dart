@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:rate_me/screens/movie.dart';
 
 class top10 extends StatefulWidget {
   const top10({Key? key}) : super(key: key);
@@ -77,19 +78,28 @@ class _top10State extends State<top10> {
             borderRadius: BorderRadius.circular(10),
           ),
           color: Colors.black,
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  'https://image.tmdb.org/t/p/w200' +
-                      topmovie[index]['poster_path'],
-                  width: 100,
-                  height: 158,
-                  fit: BoxFit.cover,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MovieScreen(movieid: topmovie[index]['id'])));
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    'https://image.tmdb.org/t/p/w200' +
+                        topmovie[index]['poster_path'],
+                    width: 100,
+                    height: 158,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

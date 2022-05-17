@@ -3,9 +3,11 @@ import 'package:rate_me/components/comment.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:rate_me/screens/otherReview.dart';
 import 'package:like_button/like_button.dart';
+import 'package:tmdb_api/tmdb_api.dart';
 
 class TabBarPage extends StatefulWidget {
-  const TabBarPage({Key? key}) : super(key: key);
+  final int movieid;
+  const TabBarPage({Key? key, required this.movieid}) : super(key: key);
 
   @override
   _TabBarPageState createState() => _TabBarPageState();
@@ -50,7 +52,7 @@ class _TabBarPageState extends State<TabBarPage>
                   indicatorSize: TabBarIndicatorSize.label,
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-                    color: Colors.redAccent,
+                    color: Color.fromARGB(127, 204, 20, 43),
                   ),
                   controller: tabController,
                   tabs: [
@@ -58,8 +60,9 @@ class _TabBarPageState extends State<TabBarPage>
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
-                            border:
-                                Border.all(color: Colors.redAccent, width: 1)),
+                            border: Border.all(
+                                color: Color.fromARGB(127, 204, 20, 43),
+                                width: 1)),
                         child: const Align(
                           alignment: Alignment.center,
                           child: Text("Comment"),
@@ -70,8 +73,9 @@ class _TabBarPageState extends State<TabBarPage>
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
-                            border:
-                                Border.all(color: Colors.redAccent, width: 1)),
+                            border: Border.all(
+                                color: Color.fromARGB(127, 204, 20, 43),
+                                width: 1)),
                         child: const Align(
                           alignment: Alignment.center,
                           child: Text("Description"),
@@ -82,8 +86,9 @@ class _TabBarPageState extends State<TabBarPage>
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
-                            border:
-                                Border.all(color: Colors.redAccent, width: 1)),
+                            border: Border.all(
+                                color: Color.fromARGB(127, 204, 20, 43),
+                                width: 1)),
                         child: const Align(
                           alignment: Alignment.center,
                           child: Text("Watch now"),
@@ -98,9 +103,9 @@ class _TabBarPageState extends State<TabBarPage>
           Expanded(
             child: TabBarView(
               controller: tabController,
-              children: const [
+              children: [
                 Tab1(),
-                Tab2(),
+                Tab2(movieid: widget.movieid),
                 Tab3(),
               ],
             ),
@@ -416,7 +421,8 @@ class _Tab1 extends State<Tab1> {
 }
 
 class Tab2 extends StatefulWidget {
-  const Tab2({Key? key}) : super(key: key);
+  final int movieid;
+  const Tab2({Key? key, required this.movieid}) : super(key: key);
   @override
   _Tab2 createState() => _Tab2();
 }
@@ -424,22 +430,62 @@ class Tab2 extends StatefulWidget {
 class _Tab2 extends State<Tab2> {
   String firstHalf = "";
   String secondHalf = "";
-  String text =
-      'After half of all life is snapped away by Thanos, the Avengers are left scattered and divided. Now with a way to reverse the damage, the Avengers and their allies assemble once more and learn to put differences aside in order to work together and set things right. Along the way, the Avengers realize that sacrifices must be made as they prepare for the ultimate final showdown with Thanos, which will result in the heroes fighting the biggest battle they have ever faced.';
 
   bool flag = true;
+  List genre = [];
+  String title = "-";
+  String runtime = "-";
+  String releasedate = "-";
+  String rate = "-";
+  String score = "-";
+  String overview = "-";
+  String votecount = "-";
+  String posterpath = '-';
+  String backdroppath = "-";
+  final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
+  final readaccesstoken =
+      "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NzAwN2ZhYWMwNWVjOWM3YWM0ZTZjMWJkNWU4YzkxNyIsInN1YiI6IjYyNzI1YzVjN2NmZmRhNzMxNzljMzE5ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Oo6sYnYEa0VOEciMuAL78Gt64Wc_qq1qGUlY8OB-7s";
 
   @override
   void initState() {
+    loadtrendingmovie();
     super.initState();
+  }
 
-    if (text.length > 200) {
-      firstHalf = text.substring(0, 200);
-      secondHalf = text.substring(200, text.length);
-    } else {
-      firstHalf = text;
-      secondHalf = "";
-    }
+  loadtrendingmovie() async {
+    TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
+        logConfig: const ConfigLogger(
+          showLogs: true,
+          showErrorLogs: true,
+        ));
+
+    Map topresult =
+        await tmdbWithCustomLogs.v3.movies.getDetails(widget.movieid);
+
+    setState(() {
+      genre = topresult['genres'];
+      title = topresult["original_title"];
+      runtime = topresult['runtime'].toString();
+      if (topresult['adult']) {
+        rate = '18+';
+      } else {
+        rate = '12+';
+      }
+      releasedate = topresult['release_date'].toString();
+      score = topresult['vote_average'].toString();
+      overview = topresult['overview'];
+      if (overview.length > 200) {
+        firstHalf = overview.substring(0, 200);
+        secondHalf = overview.substring(200, overview.length);
+      } else {
+        firstHalf = overview;
+        secondHalf = "";
+      }
+      votecount = topresult['vote_count'].toString();
+      posterpath = 'https://image.tmdb.org/t/p/w200' + topresult['poster_path'];
+      backdroppath =
+          'https://image.tmdb.org/t/p/w200' + topresult['backdrop_path'];
+    });
   }
 
   _buildCCList() {

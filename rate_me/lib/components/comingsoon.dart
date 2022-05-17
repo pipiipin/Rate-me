@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'dart:ui';
 import '../service/text.dart';
+import 'package:rate_me/screens/movie.dart';
 
 class comingsoon extends StatefulWidget {
   const comingsoon({Key? key}) : super(key: key);
@@ -79,19 +80,28 @@ class _comingsoonState extends State<comingsoon> {
             borderRadius: BorderRadius.circular(10),
           ),
           color: Colors.black,
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  'https://image.tmdb.org/t/p/w200' +
-                      comingmovie[index]['poster_path'],
-                  width: 100,
-                  height: 158,
-                  fit: BoxFit.cover,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MovieScreen(movieid: comingmovie[index]['id'])));
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    'https://image.tmdb.org/t/p/w200' +
+                        comingmovie[index]['poster_path'],
+                    width: 100,
+                    height: 158,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
