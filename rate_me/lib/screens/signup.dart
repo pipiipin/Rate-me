@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rate_me/screens/login.dart';
 import 'package:rate_me/screens/content.dart';
+import 'package:file_picker/file_picker.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -13,7 +18,39 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreen extends State<SignupScreen> {
+  PlatformFile? pickedFile;
+  UploadTask? uploadTask;
+  //"assets/pro2.png"
+  var img = Image.asset("assets/pro2.png");
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+      if (pickedFile!.path != null) {
+        img = Image.file(File(pickedFile!.path!));
+      }
+    });
+  }
+
+  Future uploadfile() async {
+    final path = 'files/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+    uploadTask = ref.putFile(file);
+
+    final snapshot = await uploadTask!.whenComplete(() {});
+    final urldownload = await snapshot.ref.getDownloadURL();
+    print(urldownload);
+    final user = FirebaseAuth.instance.currentUser!;
+    user.updatePhotoURL(urldownload);
+  }
+
   final _formKey = GlobalKey<FormState>();
+  final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordconController = TextEditingController();
@@ -36,7 +73,7 @@ class _SignupScreen extends State<SignupScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 30,right: 30),
+        padding: const EdgeInsets.only(left: 30, right: 30),
         child: Column(
           children: <Widget>[
             const Text(
@@ -49,9 +86,14 @@ class _SignupScreen extends State<SignupScreen> {
             const SizedBox(
               height: 5,
             ),
-            const CircleAvatar(
-              radius: 80,
-              backgroundImage: AssetImage("assets/pro2.png"),
+            GestureDetector(
+              onTap: () {
+                selectFile();
+              },
+              child: CircleAvatar(
+                radius: 80,
+                backgroundImage: img.image,
+              ),
             ),
             Form(
               key: _formKey,
@@ -71,6 +113,7 @@ class _SignupScreen extends State<SignupScreen> {
                   ),
                   TextFormField(
                     style: const TextStyle(fontSize: 16),
+                    controller: usernameController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your username';
@@ -208,7 +251,6 @@ class _SignupScreen extends State<SignupScreen> {
               height: 10,
             ),
             Container(
-              
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: () {
@@ -265,9 +307,14 @@ class _SignupScreen extends State<SignupScreen> {
   Future signUp() async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
-      print('signup');
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      final user = FirebaseAuth.instance.currentUser!;
+      user.updateDisplayName(usernameController.text.trim());
+
+      uploadfile();
     } on FirebaseAuthException catch (e) {
       print(e);
     }

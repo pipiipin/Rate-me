@@ -4,6 +4,8 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:rate_me/screens/otherReview.dart';
 import 'package:like_button/like_button.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TabBarPage extends StatefulWidget {
   final int movieid;
@@ -104,7 +106,7 @@ class _TabBarPageState extends State<TabBarPage>
             child: TabBarView(
               controller: tabController,
               children: [
-                Tab1(),
+                Tab1(movieid: widget.movieid),
                 Tab2(movieid: widget.movieid),
                 Tab3(),
               ],
@@ -117,29 +119,41 @@ class _TabBarPageState extends State<TabBarPage>
 }
 
 class Tab1 extends StatefulWidget {
-  const Tab1({Key? key}) : super(key: key);
+  final int movieid;
+  const Tab1({Key? key, required this.movieid}) : super(key: key);
 
   @override
   _Tab1 createState() => _Tab1();
 }
 
 class _Tab1 extends State<Tab1> {
-  final List<String> users = [
-    'Breyden Cooler',
-    'Aaron Sosick',
-    'Breyden Cooler',
-    'Aaron Sosick',
-    'Breyden Cooler',
-    'Aaron Sosick',
-    'Breyden Cooler',
-    'Aaron Sosick',
-    'Breyden Cooler',
-    'Aaron Sosick',
-    'Breyden Cooler',
-    'Aaron Sosick',
-  ];
+  List reviewsspoile = [];
+  List reviewsnospoile = [];
+  var review = FirebaseFirestore.instance.collection('moviereview');
+
+  setdata() async {
+    await review.get().then((event) {
+      setState(() {
+        List reviewssetspoile = [];
+        List reviewssetnospoile = [];
+        for (var doc in event.docs) {
+          if (widget.movieid == doc.data()['movieid']) {
+            if (doc.data()['spoile']) {
+              reviewssetspoile.add(doc.data());
+            } else {
+              reviewssetnospoile.add(doc.data());
+            }
+          }
+        }
+        reviewsnospoile = reviewssetnospoile;
+        reviewsspoile = reviewssetspoile;
+      });
+    });
+  }
 
   _commentList() {
+    setdata();
+
     return GridView.count(
       padding: const EdgeInsets.all(0),
       mainAxisSpacing: 5,
@@ -147,8 +161,20 @@ class _Tab1 extends State<Tab1> {
       crossAxisCount: 1,
       childAspectRatio: (4 / 1),
       children: List.generate(
-        users.length,
+        reviewsnospoile.length,
         (index) {
+          Map ref = reviewsnospoile[index];
+          int cou = ref['like'];
+          var imgpath = Image.asset(
+            "assets/pro2.png",
+           
+          );
+          if (ref['imagepath'] != null) {
+            imgpath = Image.network(
+              ref['imagepath'].toString(),
+           
+            );
+          }
           return Card(
             color: Colors.white,
             child: Padding(
@@ -167,12 +193,7 @@ class _Tab1 extends State<Tab1> {
                       },
                       child: CircleAvatar(
                         radius: 80,
-                        child: Image.asset(
-                          "assets/pro2.png",
-                          color: null,
-                          fit: BoxFit.cover,
-                          colorBlendMode: BlendMode.dstATop,
-                        ),
+                        backgroundImage: imgpath.image,
                       ),
                     ),
                   ),
@@ -190,7 +211,7 @@ class _Tab1 extends State<Tab1> {
                                     builder: (context) => const OtherReview()));
                           },
                           child: Text(
-                            users[index],
+                            ref['username'],
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
@@ -201,8 +222,125 @@ class _Tab1 extends State<Tab1> {
                             ),
                           ),
                         ),
-                        const Text(
-                          "That's lit!!!",
+                        Text(
+                          ref['text'],
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: 'Sarala',
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Icon(Icons.more_vert, color: Colors.black),
+                        LikeButton(
+                          size: 30,
+                          circleColor: const CircleColor(
+                              start: Colors.yellow, end: Colors.amber),
+                          bubblesColor: const BubblesColor(
+                            dotPrimaryColor: Colors.yellow,
+                            dotSecondaryColor: Colors.amber,
+                          ),
+                          likeBuilder: (bool isLiked) {
+                            return Icon(
+                              Icons.thumb_up,
+                              color: isLiked ? Colors.amber : Colors.grey,
+                              size: 30,
+                            );
+                          },
+                          likeCount: cou,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  _commentWithNPList() {
+    return GridView.count(
+      padding: const EdgeInsets.all(0),
+      mainAxisSpacing: 5,
+      crossAxisSpacing: 5,
+      crossAxisCount: 1,
+      childAspectRatio: (4 / 1),
+      children: List.generate(
+        reviewsspoile.length,
+        (index) {
+          Map ref = reviewsspoile[index];
+          int cou = ref['like'];
+          var imgpath = Image.asset(
+            "assets/pro2.png",
+          );
+          if (ref['imagepath'] != null) {
+            imgpath = Image.network(
+              ref['imagepath'].toString(),
+            );
+          }
+          return Card(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const OtherReview()));
+                      },
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundImage: imgpath.image,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const OtherReview()));
+                          },
+                          child: Text(
+                            ref['username'],
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 25.0,
+                              fontFamily: 'Sarala',
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          ref['text'],
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -237,122 +375,7 @@ class _Tab1 extends State<Tab1> {
                               size: 30,
                             );
                           },
-                          likeCount: 0,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  _commentWithNPList() {
-    return GridView.count(
-      padding: const EdgeInsets.all(0),
-      mainAxisSpacing: 5,
-      crossAxisSpacing: 5,
-      crossAxisCount: 1,
-      childAspectRatio: (4 / 1),
-      children: List.generate(
-        users.length,
-        (index) {
-          return Card(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const OtherReview()));
-                      },
-                      child: CircleAvatar(
-                        radius: 80,
-                        child: Image.asset(
-                          "assets/pro2.png",
-                          color: null,
-                          fit: BoxFit.cover,
-                          colorBlendMode: BlendMode.dstATop,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const OtherReview()));
-                          },
-                          child: Text(
-                            users[index],
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 25.0,
-                              fontFamily: 'Sarala',
-                              fontWeight: FontWeight.w800,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          "That's lit!!!",
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontFamily: 'Sarala',
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Icon(Icons.more_vert, color: Colors.black),
-                        LikeButton(
-                          size: 30,
-                          circleColor: const CircleColor(
-                              start: Colors.yellow, end: Colors.amber),
-                          bubblesColor:  const BubblesColor(
-                            dotPrimaryColor: Colors.yellow,
-                            dotSecondaryColor: Colors.amber,
-                          ),
-                          likeBuilder: (bool isLiked) {
-                            return Icon(
-                              Icons.thumb_up,
-                              color: isLiked
-                                  ? Colors.amber
-                                  : Colors.grey,
-                              size: 30,
-                            );
-                          },
-                          likeCount: 0,
-                          
+                          likeCount: cou,
                         ),
                       ],
                     ),
@@ -371,7 +394,9 @@ class _Tab1 extends State<Tab1> {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return const CommentScreen();
+        return CommentScreen(
+          movieid: widget.movieid,
+        );
       },
       animationType: DialogTransitionType.sizeFade,
     );
@@ -592,7 +617,7 @@ class _Tab2 extends State<Tab2> {
             const Padding(
               padding: EdgeInsets.only(top: 15),
               child: Text(
-                "cast & crew",
+                "Product Comapnies",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 22.0,

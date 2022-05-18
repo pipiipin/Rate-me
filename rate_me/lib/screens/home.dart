@@ -16,7 +16,45 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
+  bool _searchBoolean = false;
   @override
+  Widget _buildSearchField() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 3,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            // onSubmitted: (value) => Navigator.pushReplacement(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => const ResultScreen(),
+            //             ),
+            //           ),
+            autofocus: true,
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.all(10),
+              isCollapsed: true,
+              enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white)),
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white)),
+              border: InputBorder.none,
+              hintText:
+                  'Search', //Text that is displayed when nothing is entered.
+              hintStyle: TextStyle(
+                //Style of hintText
+                color: Colors.white60,
+                fontSize: 16,
+              ),
+            ),
+            style: const TextStyle(color: Colors.white, fontSize: 16.0),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -32,12 +70,23 @@ class _HomeScreen extends State<HomeScreen> {
             color: Colors.white,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
-            color: Colors.white,
-          ),
+        actions: <Widget>[
+          !_searchBoolean ? const SizedBox() : _buildSearchField(),
+          !_searchBoolean
+              ? IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      _searchBoolean = true;
+                    });
+                  })
+              : IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    setState(() {
+                      _searchBoolean = false;
+                    });
+                  })
         ],
       ),
       body: SingleChildScrollView(
@@ -70,7 +119,9 @@ class _HomeScreen extends State<HomeScreen> {
                                 child: Text(
                                   "Stranger Things",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               const SizedBox(
@@ -118,8 +169,7 @@ class _HomeScreen extends State<HomeScreen> {
                                   height: 50,
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
-                                        image: AssetImage(
-                                            "assets/popcorn.png"),
+                                        image: AssetImage("assets/popcorn.png"),
                                         fit: BoxFit.cover),
                                   ),
                                 ),

@@ -1,19 +1,65 @@
+import 'dart:ffi';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:rate_me/screens/editPro.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePic extends StatefulWidget {
-  const ProfilePic({Key? key}) : super(key: key);
+  final Image pathimg;
+
+  const ProfilePic({Key? key, required this.pathimg}) : super(key: key);
 
   @override
   State<ProfilePic> createState() => _profileState();
 }
 
 class _profileState extends State<ProfilePic> {
+  PlatformFile? pickedFile;
+  UploadTask? uploadTask;
+  //"assets/pro2.png"
+  var img = Image.asset("assets/pro2.png");
+  @override
+  void initState() {
+    img = widget.pathimg;
+    if (pickedFile != null) {
+      img = Image.file(File(pickedFile!.path!));
+    }
+  }
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+      if (pickedFile!.path != null) {
+        img = Image.file(File(pickedFile!.path!));
+      }
+    });
+  }
+
+  Future uploadfile() async {
+    final path = 'files/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+    uploadTask = ref.putFile(file);
+
+    final snapshot = await uploadTask!.whenComplete(() {});
+    final urldownload = await snapshot.ref.getDownloadURL();
+    print(urldownload);
+    final user = FirebaseAuth.instance.currentUser!;
+    user.updatePhotoURL(urldownload);
+  }
+
   @override
   Widget build(BuildContext context) {
     const user = UserPreferences.myUser;
     return Center(
       child: ProfileWidget(
-        imagePath: user.imagePath,
+        imagePath: img,
         onClicked: () async {},
       ),
     );
@@ -21,10 +67,10 @@ class _profileState extends State<ProfilePic> {
 }
 
 class ProfileWidget extends StatelessWidget {
-  final String imagePath;
+  final Image imagePath;
   final VoidCallback onClicked;
 
-  const ProfileWidget({
+  ProfileWidget({
     Key? key,
     required this.imagePath,
     required this.onClicked,
@@ -49,17 +95,19 @@ class ProfileWidget extends StatelessWidget {
   }
 
   Widget buildImage() {
-    final image = NetworkImage(imagePath);
-
     return ClipOval(
       child: Material(
         color: Colors.transparent,
         child: Ink.image(
-          image: image,
+          image: imagePath.image,
           fit: BoxFit.cover,
           width: 128,
           height: 128,
-          child: InkWell(onTap: onClicked),
+          child: InkWell(
+            onTap: () {
+              _profileState().selectFile();
+            },
+          ),
         ),
       ),
     );
@@ -98,7 +146,6 @@ class User {
   // final String username;
   // final String email;
   //final int password;
-  
 
   const User({
     required this.imagePath,
@@ -110,8 +157,7 @@ class User {
 
 class UserPreferences {
   static const myUser = User(
-    imagePath:
-        // "assets/pro2.png"
-        "https://cdn-icons-png.flaticon.com/512/219/219983.png"
-  );
+      imagePath:
+          // "assets/pro2.png"
+          "https://cdn-icons-png.flaticon.com/512/219/219983.png");
 }

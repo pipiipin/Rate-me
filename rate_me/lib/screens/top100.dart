@@ -17,7 +17,7 @@ class _Top100Screen extends State<Top100Screen> {
         toolbarHeight: 70,
         backgroundColor: const Color.fromARGB(255, 1, 33, 105),
         title: const Text(
-          'Top 100',
+          'Top 20',
           style: TextStyle(color: Colors.white, fontSize: 36),
         ),
         centerTitle: true,
@@ -68,7 +68,7 @@ class _Top100ListState extends State<Top100List> {
     return GridView.count(
       mainAxisSpacing: 5,
       crossAxisSpacing: 20,
-      crossAxisCount: 3,
+      crossAxisCount: 2,
       childAspectRatio: (2.7 / 5),
       children: List.generate(
         20,
@@ -76,7 +76,7 @@ class _Top100ListState extends State<Top100List> {
           String path =
               'https://image.tmdb.org/t/p/w200' + movie[index]['poster_path'];
 
-          String score = movie[index]['vote_average'].round().toString() + "%";
+          String score = movie[index]['vote_average'].toString();
           int movieid = movie[index]['id'];
           return Card(
             margin: const EdgeInsets.only(top: 10),

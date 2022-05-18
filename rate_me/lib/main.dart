@@ -8,6 +8,7 @@ import 'package:rate_me/screens/content.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
+import 'package:rate_me/screens/default.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

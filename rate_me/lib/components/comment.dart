@@ -1,19 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class CommentScreen extends StatefulWidget {
-  const CommentScreen({Key? key}) : super(key: key);
+  final int movieid;
+  CommentScreen({Key? key, required this.movieid}) : super(key: key);
 
   @override
   State<CommentScreen> createState() => _CommentState();
 }
 
 class _CommentState extends State<CommentScreen> {
-  bool valNoSpoiled = false;
+  final user = FirebaseAuth.instance.currentUser!;
+  final textfieldController = TextEditingController();
   bool valSpoiled = false;
+  bool spoil = true;
+  double score = 4;
+  var img = Image.asset("assets/pro2.png").image;
+  var review = FirebaseFirestore.instance.collection('moviereview');
+  var reviewform = <String, dynamic>{
+    "like": 0,
+    "movieid": 526896,
+    "score": 4,
+    "spoile": false,
+    "text": "good one but too old in my generation",
+    "userid": "0",
+    "username": "Guess"
+  };
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    textfieldController.dispose();
+    super.dispose();
+  }
+
+  addreview() async {
+    if (valSpoiled) {
+      spoil = true;
+    } else {
+      spoil = false;
+    }
+    ;
+    reviewform['movieid'] = widget.movieid;
+    reviewform['score'] = score;
+    reviewform['spoile'] = spoil;
+    reviewform['text'] = textfieldController.text.toString();
+    reviewform['userid'] = user.uid;
+    reviewform['username'] = user.displayName;
+    reviewform['imagepath'] = user.photoURL;
+    review.add(reviewform).then((DocumentReference doc) =>
+        print('DocumentSnapshot added with ID: ${doc.id}'));
+  }
+// Add a new document with a generated ID
 
   @override
   Widget build(BuildContext context) {
+    if (user.photoURL != null) {
+      img = (Image.network(user.photoURL.toString())).image;
+    }
     return Scaffold(
       backgroundColor: const Color.fromARGB(186, 1, 32, 105),
       body: Center(
@@ -48,9 +95,9 @@ class _CommentState extends State<CommentScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const CircleAvatar(
+                          CircleAvatar(
                             radius: 30,
-                            backgroundImage: AssetImage("assets/pro2.png"),
+                            backgroundImage: img,
                           ),
                           RatingBar.builder(
                             initialRating: 0,
@@ -63,9 +110,10 @@ class _CommentState extends State<CommentScreen> {
                                 const Color.fromARGB(255, 218, 217, 217),
                             itemBuilder: (context, _) => const Icon(
                               Icons.star,
-                              color: Colors.amber,
+                              color: Color.fromARGB(255, 90, 7, 255),
                             ),
                             onRatingUpdate: (rating) {
+                              score = rating;
                               print(rating);
                             },
                           ),
@@ -83,25 +131,10 @@ class _CommentState extends State<CommentScreen> {
                               onChanged: (value) {
                                 setState(() {
                                   valSpoiled = true;
-                                  valNoSpoiled = false;
                                 });
                               },
                             ),
                             const Text("Spoiled"),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Checkbox(
-                              value: valNoSpoiled,
-                              onChanged: (value) {
-                                setState(() {
-                                  valNoSpoiled = true;
-                                  valSpoiled = false;
-                                });
-                              },
-                            ),
-                            const Text('No Spolied'),
                           ],
                         ),
                       ],
@@ -115,6 +148,7 @@ class _CommentState extends State<CommentScreen> {
                                   const Color.fromARGB(255, 235, 66, 66)),
                             ),
                             onPressed: () {
+                              addreview();
                               Navigator.of(context).pop();
                             },
                             child: const Text(
@@ -138,6 +172,7 @@ class _CommentState extends State<CommentScreen> {
       padding: const EdgeInsets.only(left: 30, right: 30),
       height: maxLines * 20.0,
       child: TextField(
+        controller: textfieldController,
         maxLines: maxLines,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(10),

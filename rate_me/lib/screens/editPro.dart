@@ -1,19 +1,50 @@
 // ignore_for_file: file_names, unused_local_variable
 
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rate_me/components/profile_pic.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:file_picker/file_picker.dart';
+
+final user = FirebaseAuth.instance.currentUser!;
+PlatformFile? pickedFile;
+UploadTask? uploadTask;
+String username = "Guess";
+String email = "-";
+String pass = '';
+Image img = Image.asset("assets/pro2.png");
+
+
 
 class EditScreen extends StatelessWidget {
-  const EditScreen({Key? key}) : super(key: key);
+  EditScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      print(pickedFile!.path!);
+    });
+    if (user != null) {
+      username = user.displayName.toString();
+      email = user.email.toString();
+      pass = '';
+      img = Image.network(user.photoURL.toString());
+    }
+    if (pickedFile != null) {
+      img = Image.file(File(pickedFile!.path!));
+      print("add new image");
+    }
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text(
                 'Edit Profile',
                 style: TextStyle(
@@ -24,12 +55,14 @@ class EditScreen extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              ProfilePic(),
+              ProfilePic(pathimg: img),
               _TextEdit(),
             ],
           ),
         ));
   }
+
+  void setState(Null Function() param0) {}
 }
 
 class AlwaysDisabledFocusNode extends FocusNode {
@@ -45,13 +78,45 @@ class _TextEdit extends StatefulWidget {
 }
 
 class _TextEditState extends State<_TextEdit> {
+  PlatformFile? pickedFile;
+  UploadTask? uploadTask;
+  //"assets/pro2.png"
+  var img = Image.asset("assets/pro2.png");
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+      if (pickedFile!.path != null) {
+        img = Image.file(File(pickedFile!.path!));
+      }
+    });
+  }
+
+  Future uploadfile() async {
+    final path = 'files/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+    uploadTask = ref.putFile(file);
+
+    final snapshot = await uploadTask!.whenComplete(() {});
+    final urldownload = await snapshot.ref.getDownloadURL();
+    print(urldownload);
+    final user = FirebaseAuth.instance.currentUser!;
+    user.updatePhotoURL(urldownload);
+  }
   bool isUser = false;
   bool isEmail = false;
   bool isPass = false;
 
-  String user = 'Emily Beer';
-  String email = '123@gmail.com';
-  String pass = '123456';
+  final user = FirebaseAuth.instance.currentUser!;
+  String username = "Guess";
+  String email = "-";
+  String pass = '';
+
 
   bool _isObscure = true;
 
@@ -59,6 +124,11 @@ class _TextEditState extends State<_TextEdit> {
 
   @override
   Widget build(BuildContext context) {
+    if (user != null) {
+      username = user.displayName.toString();
+      email = user.email.toString();
+      pass = '';
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -91,13 +161,15 @@ class _TextEditState extends State<_TextEdit> {
                               Expanded(
                                 flex: 2,
                                 child: !isUser
-                                    ? Text(user)
+                                    ? Text(username)
                                     : TextFormField(
-                                        initialValue: user,
+                                        initialValue: username,
                                         textInputAction: TextInputAction.done,
                                         onFieldSubmitted: (value) {
-                                          setState(() =>
-                                              {isUser = false, user = value});
+                                          setState(() => {
+                                                isUser = false,
+                                                username = value
+                                              });
                                         },
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
@@ -217,7 +289,8 @@ class _TextEditState extends State<_TextEdit> {
                                                 ? Icons.visibility
                                                 : Icons.visibility_off),
                                           ),
-                                           suffixIconConstraints: BoxConstraints(maxHeight: 14),
+                                          suffixIconConstraints:
+                                              BoxConstraints(maxHeight: 14),
                                           fillColor: const Color.fromARGB(
                                               255, 190, 189, 189),
                                           filled: true,

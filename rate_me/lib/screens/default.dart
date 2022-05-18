@@ -80,25 +80,25 @@ class _DefaultScreenState extends State<DefaultScreen> {
                     size: 35,
                   ),
           ),
-          IconButton(
-            enableFeedback: false,
-            onPressed: () {
-              setState(() {
-                pageIndex = 2;
-              });
-            },
-            icon: pageIndex == 2
-                ? const Icon(
-                    Icons.access_time_filled,
-                    color: Colors.white,
-                    size: 35,
-                  )
-                : const Icon(
-                    Icons.access_time_filled,
-                    color: Colors.black,
-                    size: 35,
-                  ),
-          ),
+          // IconButton(
+          //   enableFeedback: false,
+          //   onPressed: () {
+          //     setState(() {
+          //       pageIndex = 2;
+          //     });
+          //   },
+          //   icon: pageIndex == 2
+          //       ? const Icon(
+          //           Icons.access_time_filled,
+          //           color: Colors.white,
+          //           size: 35,
+          //         )
+          //       : const Icon(
+          //           Icons.access_time_filled,
+          //           color: Colors.black,
+          //           size: 35,
+          //         ),
+          // ),
           IconButton(
             enableFeedback: false,
             onPressed: () {

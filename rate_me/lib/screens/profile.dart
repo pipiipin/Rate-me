@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rate_me/screens/editPro.dart';
 import 'package:rate_me/screens/history.dart';
@@ -13,14 +14,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  var img = Image.asset("assets/pro2.png");
+  final user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
+    if (user != null) {
+      img = Image.network(user.photoURL.toString());
+    }
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Emily Beer',
+            Text((user.displayName).toString(),
                 style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold)),
             const SizedBox(
               height: 20,
@@ -40,7 +47,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const HistoryScreen()));
+                                    builder: (context) =>
+                                        const HistoryScreen()));
                           },
                           child: Column(children: const [
                             Image(
@@ -58,7 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const LastestScreen()));
+                                    builder: (context) =>
+                                        const LastestScreen()));
                           },
                           child: Column(children: const [
                             Image(
@@ -79,21 +88,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const EditScreen()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditScreen()));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ClipOval(
-                            child: SizedBox.fromSize(
-                              size: Size.fromRadius(
-                                  MediaQuery.of(context).size.width /
-                                      4), // Image radius
-                              child: Image.asset("assets/pro2.png",
-                                  fit: BoxFit.cover),
-                            ),
+                          CircleAvatar(
+                            radius: 80,
+                            backgroundImage: img.image,
                           ),
                           const SizedBox(
                             height: 10,
@@ -115,7 +119,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const ChangeScreen()));
+                                    builder: (context) =>
+                                        const ChangeScreen()));
                           },
                           child: Column(children: const [
                             Image(
@@ -130,6 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         InkWell(
                           onTap: () {
+                            FirebaseAuth.instance.signOut();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
