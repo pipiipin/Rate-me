@@ -153,34 +153,34 @@ class _CategoryScreen extends State<CategoryScreen> {
                 height: 5.0,
                 color: const Color.fromARGB(255, 196, 196, 196),
               ),
-              InkWell(
-                onTap: () {},
-                child: const Text(
-                  '2022',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Text(
-                  '2021',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Text(
-                  '2020',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: const Text(
-                  '2019',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () {},
+              //   child: const Text(
+              //     '2022',
+              //     style: TextStyle(fontSize: 18, color: Colors.white),
+              //   ),
+              // ),
+              // InkWell(
+              //   onTap: () {},
+              //   child: const Text(
+              //     '2021',
+              //     style: TextStyle(fontSize: 18, color: Colors.white),
+              //   ),
+              // ),
+              // InkWell(
+              //   onTap: () {},
+              //   child: const Text(
+              //     '2020',
+              //     style: TextStyle(fontSize: 18, color: Colors.white),
+              //   ),
+              // ),
+              // InkWell(
+              //   onTap: () {},
+              //   child: const Text(
+              //     '2019',
+              //     style: TextStyle(fontSize: 18, color: Colors.white),
+              //   ),
+              // ),
               CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 30,

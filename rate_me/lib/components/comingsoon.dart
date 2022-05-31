@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rate_me/components/trend_movies.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'dart:ui';
 import '../service/text.dart';
@@ -12,6 +15,24 @@ class comingsoon extends StatefulWidget {
 }
 
 class _comingsoonState extends State<comingsoon> {
+  var list = FirebaseFirestore.instance.collection('History');
+  final user = FirebaseAuth.instance.currentUser!;
+  addmovie(int movieid) async {
+    var lists = [movieid];
+    var doc_id;
+    await list.get().then((event) {
+      setState(() {
+        for (var doc in event.docs) {
+          if (user.displayName == doc.data()['usernamehist']) {
+            doc_id = doc.id;
+          }
+        }
+      });
+    });
+    list.doc(doc_id).update({"historylist": FieldValue.arrayUnion(lists)});
+  }
+
+  //addmovie(movie[index]['id']);
   List comingmovie = [];
   final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
   final readaccesstoken =
@@ -82,6 +103,7 @@ class _comingsoonState extends State<comingsoon> {
           color: Colors.black,
           child: InkWell(
             onTap: () {
+              addmovie(comingmovie[index]['id']);
               Navigator.push(
                   context,
                   MaterialPageRoute(

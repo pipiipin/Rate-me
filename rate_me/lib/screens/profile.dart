@@ -19,9 +19,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (user != null) {
-      img = Image.network(user.photoURL.toString());
-    }
+    setState(() {
+      if (user != null) {
+        img = Image.network(user.photoURL.toString());
+      }
+    });
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -42,25 +45,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const HistoryScreen()));
-                          },
-                          child: Column(children: const [
-                            Image(
-                              image: AssetImage("assets/piece.png"),
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text('history')
-                          ]),
-                        ),
+                        // InkWell(
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //             builder: (context) =>
+                        //                 const HistoryScreen()));
+                        //   },
+                        //   child: Column(children: const [
+                        //     Image(
+                        //       image: AssetImage("assets/piece.png"),
+                        //       fit: BoxFit.cover,
+                        //     ),
+                        //     SizedBox(
+                        //       height: 10,
+                        //     ),
+                        //     Text('history')
+                        //   ]),
+                        // ),
                         InkWell(
                           onTap: () {
                             Navigator.push(

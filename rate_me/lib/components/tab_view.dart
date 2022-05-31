@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rate_me/components/comment.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:rate_me/screens/movie.dart';
 import 'package:rate_me/screens/otherReview.dart';
 import 'package:like_button/like_button.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rate_me/components/popupreview.dart';
 
 class TabBarPage extends StatefulWidget {
   final int movieid;
@@ -41,7 +44,7 @@ class _TabBarPageState extends State<TabBarPage>
   @override
   build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height / 1.05,
+      height: MediaQuery.of(context).size.height / 1.10,
       child: Column(
         children: [
           Column(
@@ -93,7 +96,7 @@ class _TabBarPageState extends State<TabBarPage>
                                 width: 1)),
                         child: const Align(
                           alignment: Alignment.center,
-                          child: Text("Watch now"),
+                          child: Text("Suggestion"),
                         ),
                       ),
                     ),
@@ -108,7 +111,7 @@ class _TabBarPageState extends State<TabBarPage>
               children: [
                 Tab1(movieid: widget.movieid),
                 Tab2(movieid: widget.movieid),
-                Tab3(),
+                Tab3(movieid: widget.movieid),
               ],
             ),
           ),
@@ -167,103 +170,105 @@ class _Tab1 extends State<Tab1> {
           int cou = ref['like'];
           var imgpath = Image.asset(
             "assets/pro2.png",
-           
           );
           if (ref['imagepath'] != null) {
             imgpath = Image.network(
               ref['imagepath'].toString(),
-           
             );
           }
-          return Card(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const OtherReview()));
-                      },
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundImage: imgpath.image,
+          return InkWell(
+            onTap: () {
+              _displayDialog2(context, ref['username'], cou, imgpath,
+                  ref['text'], ref['score']);
+              print(ref['score']);
+            },
+            child: Card(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        child: CircleAvatar(
+                          radius: 80,
+                          backgroundImage: imgpath.image,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const OtherReview()));
-                          },
-                          child: Text(
-                            ref['username'],
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            child: Text(
+                              ref['username'],
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 25.0,
+                                fontFamily: 'Sarala',
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            ref['text'],
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 25.0,
+                            style: TextStyle(
+                              fontSize: 16.0,
                               fontFamily: 'Sarala',
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w500,
                               color: Colors.black,
                             ),
                           ),
-                        ),
-                        Text(
-                          ref['text'],
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: 'Sarala',
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Icon(Icons.more_vert, color: Colors.black),
-                        LikeButton(
-                          size: 30,
-                          circleColor: const CircleColor(
-                              start: Colors.yellow, end: Colors.amber),
-                          bubblesColor: const BubblesColor(
-                            dotPrimaryColor: Colors.yellow,
-                            dotSecondaryColor: Colors.amber,
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(ref['score'].toString()),
+                              Icon(Icons.star, color: Colors.amber, size: 20),
+                            ],
                           ),
-                          likeBuilder: (bool isLiked) {
-                            return Icon(
-                              Icons.thumb_up,
-                              color: isLiked ? Colors.amber : Colors.grey,
-                              size: 30,
-                            );
-                          },
-                          likeCount: cou,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                          LikeButton(
+                            size: 30,
+                            circleColor: const CircleColor(
+                                start: Colors.yellow, end: Colors.amber),
+                            bubblesColor: const BubblesColor(
+                              dotPrimaryColor: Colors.yellow,
+                              dotSecondaryColor: Colors.amber,
+                            ),
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                Icons.thumb_up,
+                                color: isLiked ? Colors.amber : Colors.grey,
+                                size: 30,
+                              );
+                            },
+                            likeCount: cou,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -273,6 +278,9 @@ class _Tab1 extends State<Tab1> {
   }
 
   _commentWithNPList() {
+    var imgpath = Image.asset(
+      "assets/pro2.png",
+    );
     return GridView.count(
       padding: const EdgeInsets.all(0),
       mainAxisSpacing: 5,
@@ -284,103 +292,103 @@ class _Tab1 extends State<Tab1> {
         (index) {
           Map ref = reviewsspoile[index];
           int cou = ref['like'];
-          var imgpath = Image.asset(
-            "assets/pro2.png",
-          );
+
           if (ref['imagepath'] != null) {
             imgpath = Image.network(
               ref['imagepath'].toString(),
             );
           }
-          return Card(
-            color: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const OtherReview()));
-                      },
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundImage: imgpath.image,
+          return InkWell(
+            onTap: () {
+              _displayDialog2(context, ref['username'], cou, imgpath,
+                  ref['text'], ref['score']);
+              print(ref['score']);
+            },
+            child: Card(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: InkWell(
+                        child: CircleAvatar(
+                          radius: 80,
+                          backgroundImage: imgpath.image,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const OtherReview()));
-                          },
-                          child: Text(
-                            ref['username'],
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const OtherReview()));
+                            },
+                            child: Text(
+                              ref['username'],
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 25.0,
+                                fontFamily: 'Sarala',
+                                fontWeight: FontWeight.w800,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            ref['text'],
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 25.0,
+                            style: TextStyle(
+                              fontSize: 20.0,
                               fontFamily: 'Sarala',
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w500,
                               color: Colors.black,
                             ),
                           ),
-                        ),
-                        Text(
-                          ref['text'],
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontFamily: 'Sarala',
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Icon(Icons.more_vert, color: Colors.black),
-                        LikeButton(
-                          size: 30,
-                          circleColor: const CircleColor(
-                              start: Colors.yellow, end: Colors.amber),
-                          bubblesColor: const BubblesColor(
-                            dotPrimaryColor: Colors.yellow,
-                            dotSecondaryColor: Colors.amber,
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Icon(Icons.more_vert, color: Colors.black),
+                          LikeButton(
+                            size: 30,
+                            circleColor: const CircleColor(
+                                start: Colors.yellow, end: Colors.amber),
+                            bubblesColor: const BubblesColor(
+                              dotPrimaryColor: Colors.yellow,
+                              dotSecondaryColor: Colors.amber,
+                            ),
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                Icons.thumb_up,
+                                color: isLiked ? Colors.amber : Colors.grey,
+                                size: 30,
+                              );
+                            },
+                            likeCount: cou,
                           ),
-                          likeBuilder: (bool isLiked) {
-                            return Icon(
-                              Icons.thumb_up,
-                              color: isLiked ? Colors.amber : Colors.grey,
-                              size: 30,
-                            );
-                          },
-                          likeCount: cou,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -397,6 +405,23 @@ class _Tab1 extends State<Tab1> {
         return CommentScreen(
           movieid: widget.movieid,
         );
+      },
+      animationType: DialogTransitionType.sizeFade,
+    );
+  }
+
+  _displayDialog2(BuildContext context, String name, int like, Image imgpath,
+      String text, double score) {
+    showAnimatedDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return PopupReview(
+            name: name,
+            like: like,
+            profilepath: imgpath,
+            text: text,
+            score: score);
       },
       animationType: DialogTransitionType.sizeFade,
     );
@@ -477,6 +502,8 @@ class _Tab2 extends State<Tab2> {
     super.initState();
   }
 
+  var creditcast;
+  var similarmv;
   loadtrendingmovie() async {
     TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
         logConfig: const ConfigLogger(
@@ -486,8 +513,12 @@ class _Tab2 extends State<Tab2> {
 
     Map topresult =
         await tmdbWithCustomLogs.v3.movies.getDetails(widget.movieid);
+    Map credit = await tmdbWithCustomLogs.v3.movies.getCredits(widget.movieid);
+    Map similar = await tmdbWithCustomLogs.v3.movies.getSimilar(widget.movieid);
 
     setState(() {
+      similarmv = similar['results'];
+      creditcast = credit['cast'];
       genre = topresult['genres'];
       title = topresult["original_title"];
       runtime = topresult['runtime'].toString();
@@ -514,25 +545,55 @@ class _Tab2 extends State<Tab2> {
   }
 
   _buildCCList() {
+    int lsssize = 10;
+    if (creditcast.length <= 10) {
+      lsssize = creditcast.length;
+    } else {
+      lsssize = 10;
+    }
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: 10,
+      itemCount: lsssize,
       itemBuilder: (context, index) {
         return Card(
-          child: Container(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
-            width: 100.0,
-            height: 120.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5.0),
-              child: Container(
-                color: const Color.fromARGB(255, 196, 196, 196),
-              ),
+          margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: Colors.white,
+          child: InkWell(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  // child: const Image(
+                  //   image: AssetImage("assets/movie_example.jpg"),
+                  child: Image.network(
+                    'https://image.tmdb.org/t/p/w200' +
+                        creditcast[index]['profile_path'],
+                    width: 117,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        // width: MediaQuery.of(context).size.width / 6,
+                        child: Text(
+                          creditcast[index]['name'],
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -546,20 +607,32 @@ class _Tab2 extends State<Tab2> {
       itemCount: 10,
       itemBuilder: (context, index) {
         return Card(
-          child: Container(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
-            width: 100.0,
-            height: 120.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5.0),
-              child: Container(
-                color: const Color.fromARGB(255, 196, 196, 196),
-              ),
+          margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: Colors.black,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MovieScreen(movieid: similarmv[index]['id'])));
+            },
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    'https://image.tmdb.org/t/p/w200' +
+                        similarmv[index]['poster_path'],
+                    width: 117,
+                    height: 170,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -617,7 +690,7 @@ class _Tab2 extends State<Tab2> {
             const Padding(
               padding: EdgeInsets.only(top: 15),
               child: Text(
-                "Product Comapnies",
+                "Cast",
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 22.0,
@@ -628,27 +701,9 @@ class _Tab2 extends State<Tab2> {
               ),
             ),
             Container(
-              height: 140,
+              height: 200,
               color: Colors.white,
               child: (_buildCCList()),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 15),
-              child: Text(
-                "Director",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontFamily: 'Sarala',
-                  fontWeight: FontWeight.w400,
-                  color: Colors.red,
-                ),
-              ),
-            ),
-            Container(
-              height: 140,
-              color: Colors.white,
-              child: (_buildDirectorList()),
             ),
           ]),
         ),
@@ -657,8 +712,55 @@ class _Tab2 extends State<Tab2> {
   }
 }
 
-class Tab3 extends StatelessWidget {
-  const Tab3({Key? key}) : super(key: key);
+class Tab3 extends StatefulWidget {
+  final int movieid;
+  Tab3({Key? key, required this.movieid}) : super(key: key);
+  @override
+  _Tab3 createState() => _Tab3();
+}
+
+class _Tab3 extends State<Tab3> {
+  var list = FirebaseFirestore.instance.collection('History');
+  final user = FirebaseAuth.instance.currentUser!;
+  addmovie(int movieid) async {
+    var lists = [movieid];
+    var doc_id;
+    await list.get().then((event) {
+      setState(() {
+        for (var doc in event.docs) {
+          if (user.displayName == doc.data()['usernamehist']) {
+            doc_id = doc.id;
+          }
+        }
+      });
+    });
+    list.doc(doc_id).update({"historylist": FieldValue.arrayUnion(lists)});
+  }
+
+  //addmovie(movie[index]['id']);
+  final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
+  final readaccesstoken =
+      "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NzAwN2ZhYWMwNWVjOWM3YWM0ZTZjMWJkNWU4YzkxNyIsInN1YiI6IjYyNzI1YzVjN2NmZmRhNzMxNzljMzE5ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Oo6sYnYEa0VOEciMuAL78Gt64Wc_qq1qGUlY8OB-7s";
+
+  @override
+  void initState() {
+    loadtrendingmovie();
+    super.initState();
+  }
+
+  var similarmv;
+  loadtrendingmovie() async {
+    TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
+        logConfig: const ConfigLogger(
+          showLogs: true,
+          showErrorLogs: true,
+        ));
+
+    Map similar = await tmdbWithCustomLogs.v3.movies.getSimilar(widget.movieid);
+    setState(() {
+      similarmv = similar['results'];
+    });
+  }
 
   _buildWatchList() {
     return GridView.count(
@@ -668,36 +770,52 @@ class Tab3 extends StatelessWidget {
       crossAxisCount: 3,
       childAspectRatio: (5 / 6),
       children: List.generate(
-        8,
+        20,
         (index) {
           return Card(
-            child: Container(
+            margin: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            color: Colors.white,
+            child: InkWell(
+              onTap: () {
+                addmovie(similarmv[index]['id']);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MovieScreen(movieid: similarmv[index]['id'])));
+              },
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    color: Colors.white,
-                    width: 100,
-                    height: 100,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.zero,
-                      child: Image.asset(
-                        "assets/netflix.png",
-                        fit: BoxFit.cover,
-                        colorBlendMode: BlendMode.dstATop,
-                      ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    // child: const Image(
+                    //   image: AssetImage("assets/movie_example.jpg"),
+                    child: Image.network(
+                      'https://image.tmdb.org/t/p/w200' +
+                          similarmv[index]['poster_path'],
+                      width: 90,
+                      height: 130,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Text(
-                      "Netflix",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontFamily: 'Sarala',
-                        fontWeight: FontWeight.w800,
-                        color: Colors.black,
-                      ),
+                  Container(
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 5,
+                          child: Text(
+                            similarmv[index]['title'],
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -713,7 +831,7 @@ class Tab3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            height: MediaQuery.of(context).size.height / 1,
+            height: MediaQuery.of(context).size.height * 2,
             color: Colors.white,
             padding: const EdgeInsets.all(20),
             child: _buildWatchList()));

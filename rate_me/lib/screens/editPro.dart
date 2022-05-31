@@ -10,35 +10,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:file_picker/file_picker.dart';
 
-final user = FirebaseAuth.instance.currentUser!;
-PlatformFile? pickedFile;
-UploadTask? uploadTask;
-String username = "Guess";
-String email = "-";
-String pass = '';
-Image img = Image.asset("assets/pro2.png");
-
-
-
 class EditScreen extends StatelessWidget {
   EditScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      print(pickedFile!.path!);
-    });
-    if (user != null) {
-      username = user.displayName.toString();
-      email = user.email.toString();
-      pass = '';
-      img = Image.network(user.photoURL.toString());
-    }
-    if (pickedFile != null) {
-      img = Image.file(File(pickedFile!.path!));
-      print("add new image");
-    }
-
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -55,7 +31,6 @@ class EditScreen extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              ProfilePic(pathimg: img),
               _TextEdit(),
             ],
           ),
@@ -88,6 +63,9 @@ class _TextEditState extends State<_TextEdit> {
     if (result == null) return;
 
     setState(() {
+      if (user != null) {
+        img = Image.network(user.photoURL.toString());
+      }
       pickedFile = result.files.first;
       if (pickedFile!.path != null) {
         img = Image.file(File(pickedFile!.path!));
@@ -95,19 +73,29 @@ class _TextEditState extends State<_TextEdit> {
     });
   }
 
-  Future uploadfile() async {
-    final path = 'files/${pickedFile!.name}';
-    final file = File(pickedFile!.path!);
+  Future update() async {
+    if (pickedFile != null) {
+      final path = 'files/${pickedFile!.name}';
+      final file = File(pickedFile!.path!);
 
-    final ref = FirebaseStorage.instance.ref().child(path);
-    uploadTask = ref.putFile(file);
+      final ref = FirebaseStorage.instance.ref().child(path);
+      uploadTask = ref.putFile(file);
 
-    final snapshot = await uploadTask!.whenComplete(() {});
-    final urldownload = await snapshot.ref.getDownloadURL();
-    print(urldownload);
-    final user = FirebaseAuth.instance.currentUser!;
-    user.updatePhotoURL(urldownload);
+      final snapshot = await uploadTask!.whenComplete(() {});
+      final urldownload = await snapshot.ref.getDownloadURL();
+      print(urldownload);
+      final user = FirebaseAuth.instance.currentUser!;
+      user.updatePhotoURL(urldownload);
+    }
+    user.updateDisplayName(usernameController.text.trim());
+    user.updateEmail(emailController.text.trim());
+    // user.updateDisplayName(username);
+    // user.updateEmail(email);
+    print(usernameController.text.trim());
+    print(emailController.text.trim());
+    Navigator.of(context).pop(RefreshProgressIndicator.defaultStrokeWidth);
   }
+
   bool isUser = false;
   bool isEmail = false;
   bool isPass = false;
@@ -117,6 +105,8 @@ class _TextEditState extends State<_TextEdit> {
   String email = "-";
   String pass = '';
 
+  var usernameController = TextEditingController();
+  var emailController = TextEditingController();
 
   bool _isObscure = true;
 
@@ -124,14 +114,28 @@ class _TextEditState extends State<_TextEdit> {
 
   @override
   Widget build(BuildContext context) {
-    if (user != null) {
-      username = user.displayName.toString();
+    if (pickedFile != null) {
+      img = Image.file(File(pickedFile!.path!));
+    } else {
+      img = Image.network(user.photoURL.toString());
+      usernameController =
+          TextEditingController(text: user.displayName.toString());
+      emailController = TextEditingController(text: user.email.toString());
       email = user.email.toString();
-      pass = '';
+      username = user.displayName.toString();
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        GestureDetector(
+          onTap: () {
+            selectFile();
+          },
+          child: CircleAvatar(
+            radius: 80,
+            backgroundImage: img.image,
+          ),
+        ),
         Form(
           key: _formKey,
           child: Column(
@@ -161,9 +165,9 @@ class _TextEditState extends State<_TextEdit> {
                               Expanded(
                                 flex: 2,
                                 child: !isUser
-                                    ? Text(username)
+                                    ? Text(usernameController.text.trim())
                                     : TextFormField(
-                                        initialValue: username,
+                                        controller: usernameController,
                                         textInputAction: TextInputAction.done,
                                         onFieldSubmitted: (value) {
                                           setState(() => {
@@ -213,9 +217,9 @@ class _TextEditState extends State<_TextEdit> {
                               Expanded(
                                 flex: 2,
                                 child: !isEmail
-                                    ? Text(email)
+                                    ? Text(emailController.text.trim())
                                     : TextFormField(
-                                        initialValue: email,
+                                        controller: emailController,
                                         textInputAction: TextInputAction.done,
                                         onFieldSubmitted: (value) {
                                           setState(() =>
@@ -324,7 +328,7 @@ class _TextEditState extends State<_TextEdit> {
         Container(
           alignment: Alignment.center,
           child: ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => update(),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
               primary: const Color.fromARGB(255, 1, 33, 105),

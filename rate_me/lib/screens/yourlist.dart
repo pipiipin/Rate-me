@@ -1,5 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:rate_me/components/profile_pic.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+
+import 'movie.dart';
 
 class YourListScreen extends StatefulWidget {
   const YourListScreen({Key? key}) : super(key: key);
@@ -9,28 +14,71 @@ class YourListScreen extends StatefulWidget {
 }
 
 class _YourListScreen extends State<YourListScreen> {
-  List topmovie = [];
+  var list = FirebaseFirestore.instance.collection('Listmovie');
+  final user = FirebaseAuth.instance.currentUser!;
+  var listid = [];
+  setdata() async {
+    await list.get().then((event) {
+      setState(() {
+        List reviewssetspoile = [];
+        List reviewssetnospoile = [];
+        for (var doc in event.docs) {
+          if (user.displayName == doc.data()['usernamelist']) {
+            print("i see");
+            listid = doc.data()['movieid'];
+            print(listid[0]);
+          }
+        }
+      });
+      print(listid.length);
+      for (int i = 0; i < listid.length; i++) {
+        findmovie(i);
+      }
+    });
+  }
+
+  renovefromlist(int movieid) async {
+    var lists = [movieid];
+    var doc_id;
+    await list.get().then((event) {
+      setState(() {
+        for (var doc in event.docs) {
+          if (user.displayName == doc.data()['usernamelist']) {
+            var listmov = [];
+            listmov = doc.data()['movieid'];
+            doc_id = doc.id;
+          }
+        }
+      });
+    });
+    list.doc(doc_id).update({"movieid": FieldValue.arrayRemove(lists)});
+  }
+
+  var topmovie = [];
   final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
   final readaccesstoken =
       "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NzAwN2ZhYWMwNWVjOWM3YWM0ZTZjMWJkNWU4YzkxNyIsInN1YiI6IjYyNzI1YzVjN2NmZmRhNzMxNzljMzE5ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Oo6sYnYEa0VOEciMuAL78Gt64Wc_qq1qGUlY8OB-7s";
 
   @override
   void initState() {
-    loadtrendingmovie();
+    setdata();
+
     super.initState();
   }
 
-  loadtrendingmovie() async {
+  findmovie(int index) async {
     TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
         logConfig: const ConfigLogger(
           showLogs: true,
           showErrorLogs: true,
         ));
 
-    Map topresult = await tmdbWithCustomLogs.v3.movies.getNowPlaying();
+    Map topresult =
+        await tmdbWithCustomLogs.v3.movies.getDetails(listid[index]);
+    print(topresult);
 
     setState(() {
-      topmovie = topresult['results'];
+      topmovie.add(topresult);
     });
   }
 
@@ -71,7 +119,14 @@ class _YourListScreen extends State<YourListScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ClipRRect(
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MovieScreen(
+                                    movieid: topmovie[index]['id'])));
+                      },
                       borderRadius: BorderRadius.circular(10),
                       child: Image.network(
                         'https://image.tmdb.org/t/p/w200' +
@@ -170,6 +225,7 @@ class _YourListScreen extends State<YourListScreen> {
                                 ),
                                 onPressed: () {
                                   setState(() {
+                                    renovefromlist(topmovie[index]['id']);
                                     topmovie.removeAt(index);
                                   });
                                 },

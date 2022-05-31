@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'dart:ui';
@@ -12,6 +14,25 @@ class trendMovies extends StatefulWidget {
 }
 
 class _trendMoviesState extends State<trendMovies> {
+  var list = FirebaseFirestore.instance.collection('History');
+  final user = FirebaseAuth.instance.currentUser!;
+  addmovie(int movieid) async {
+    var lists = [movieid];
+    var doc_id;
+    await list.get().then((event) {
+      setState(() {
+        for (var doc in event.docs) {
+          if (user.displayName == doc.data()['usernamehist']) {
+            doc_id = doc.id;
+            print("i see the doc");
+          }
+        }
+      });
+    });
+    list.doc(doc_id).update({"historylist": FieldValue.arrayUnion(lists)});
+  }
+
+  //addmovie(movie[index]['id']);
   List trendingmovie = [];
   final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
   final readaccesstoken =
@@ -30,7 +51,8 @@ class _trendMoviesState extends State<trendMovies> {
           showErrorLogs: true,
         ));
 
-    Map trendingresult = await tmdbWithCustomLogs.v3.trending.getTrending();
+    Map trendingresult =
+        await tmdbWithCustomLogs.v3.movies.getNowPlaying(page: 2);
 
     setState(() {
       trendingmovie = trendingresult['results'];
@@ -82,6 +104,7 @@ class _trendMoviesState extends State<trendMovies> {
           color: Colors.black,
           child: InkWell(
             onTap: () {
+              addmovie(trendingmovie[index]['id']);
               Navigator.push(
                   context,
                   MaterialPageRoute(

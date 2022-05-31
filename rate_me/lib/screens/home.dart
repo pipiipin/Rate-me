@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
@@ -6,6 +8,8 @@ import 'package:rate_me/components/new_movies.dart';
 import 'package:rate_me/components/top10_movies.dart';
 import 'package:rate_me/components/comingsoon.dart';
 import 'package:rate_me/components/category.dart';
+import 'package:rate_me/screens/searchresult.dart';
+import 'package:tmdb_api/tmdb_api.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,6 +20,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
+  var numran = Random().nextInt(19);
+  List topmovie = [];
+  final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
+  final readaccesstoken =
+      "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NzAwN2ZhYWMwNWVjOWM3YWM0ZTZjMWJkNWU4YzkxNyIsInN1YiI6IjYyNzI1YzVjN2NmZmRhNzMxNzljMzE5ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Oo6sYnYEa0VOEciMuAL78Gt64Wc_qq1qGUlY8OB-7s";
+
+  @override
+  void initState() {
+    loadtrendingmovie();
+    super.initState();
+  }
+
+  loadtrendingmovie() async {
+    TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
+        logConfig: ConfigLogger(
+          showLogs: true,
+          showErrorLogs: true,
+        ));
+
+    Map topresult = await tmdbWithCustomLogs.v3.movies.getNowPlaying();
+
+    setState(() {
+      topmovie = topresult['results'];
+    });
+  }
+
   bool _searchBoolean = false;
   @override
   Widget _buildSearchField() {
@@ -25,12 +55,12 @@ class _HomeScreen extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextField(
-            // onSubmitted: (value) => Navigator.pushReplacement(
-            //             context,
-            //             MaterialPageRoute(
-            //               builder: (context) => const ResultScreen(),
-            //             ),
-            //           ),
+            onSubmitted: (value) => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResultScreen(searchword: value),
+              ),
+            ),
             autofocus: true,
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.all(10),
@@ -99,10 +129,14 @@ class _HomeScreen extends State<HomeScreen> {
                   Container(
                     width: double.maxFinite,
                     height: 500,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage("assets/poster.jpg"),
-                          fit: BoxFit.cover),
+                          image: Image.network(
+                                  'https://image.tmdb.org/t/p/w500' +
+                                      topmovie[numran]['poster_path'])
+                              .image,
+                          fit: BoxFit.cover,
+                          filterQuality: FilterQuality.high),
                     ),
                   ),
                   Column(
@@ -114,78 +148,44 @@ class _HomeScreen extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(children: [
-                              const Align(
+                              Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Stranger Things",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                // child: Text(
+                                //   topmovie[numran]['title'],
+                                //   style: TextStyle(
+                                //       color: Colors.white,
+                                //       fontSize: 24,
+                                //       fontWeight: FontWeight.bold),
+                                // ),
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                children: [
-                                  Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(15, 2, 15, 2),
-                                    child: const Text(
-                                      "horror",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: const Color.fromARGB(
-                                          104, 103, 103, 103),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(15, 2, 15, 2),
-                                    child: const Text(
-                                      "comedy",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: const Color.fromARGB(
-                                          104, 103, 103, 103),
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ]),
                             Row(
                               children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage("assets/popcorn.png"),
-                                        fit: BoxFit.cover),
-                                  ),
-                                ),
+                                // Container(
+                                //   width: 50,
+                                //   height: 50,
+                                //   decoration: const BoxDecoration(
+                                //     image: DecorationImage(
+                                //         image: AssetImage("assets/popcorn.png"),
+                                //         fit: BoxFit.cover),
+                                //   ),
+                                // ),
                                 // Icon(
                                 //   Icons.fastfood,
                                 //   color: Color.fromARGB(255, 255, 255, 255),
                                 //   size: 30,
                                 // ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                const Text(
-                                  "98%",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
+                                // const SizedBox(
+                                //   width: 10,
+                                // ),
+                                // Text(
+                                //   topmovie[numran]['vote_average'].toString(),
+                                //   style: TextStyle(
+                                //       color: Colors.white, fontSize: 20),
+                                // ),
                               ],
                             ),
                           ],

@@ -1,5 +1,8 @@
+import 'dart:ffi';
 import 'dart:io';
-
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tmdb_api/tmdb_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +21,72 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreen extends State<SignupScreen> {
+  var idlist = Random().nextInt(3000);
+  final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
+  final readaccesstoken =
+      "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NzAwN2ZhYWMwNWVjOWM3YWM0ZTZjMWJkNWU4YzkxNyIsInN1YiI6IjYyNzI1YzVjN2NmZmRhNzMxNzljMzE5ZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Oo6sYnYEa0VOEciMuAL78Gt64Wc_qq1qGUlY8OB-7s";
+
   PlatformFile? pickedFile;
   UploadTask? uploadTask;
   //"assets/pro2.png"
   var img = Image.asset("assets/pro2.png");
+
+  // loadtrendingmovie(var name) async {
+  //   TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
+  //       logConfig: ConfigLogger(
+  //         showLogs: true,
+  //         showErrorLogs: true,
+  //       ));
+  //   Map rt = await tmdbWithCustomLogs.v4.auth.createRequestToken();
+  //   String rtoken = rt['request_token'];
+  //   Map at = await tmdbWithCustomLogs.v4.auth.createAccessToken(rtoken);
+  //   String atoken = at["access_token"];
+  //   Map newresult = await tmdbWithCustomLogs.v4.lists.createList(atoken, name);
+  //   print(name);
+  //   print('newresult');
+  //   print(newresult["list_id"]);
+
+  //   setState(() {
+  //     idlist = newresult["list_id"];
+  //   });
+
+  //   return newresult["list_id"];
+  // }
+
+  var histlist = [550];
+  var listmovie = [550];
+
+  createlist() async {
+    var list = FirebaseFirestore.instance.collection('Listmovie');
+    var listform = <String, dynamic>{
+      "listid": idlist,
+      "usernamelist": usernameController.text.trim(),
+      "movieid": listmovie
+    };
+
+    // listform['usernamelist'] = usernameController.text.trim();
+    // print('idlist' + idlist.toString());
+    // listform['listid'] = idlist;
+    // listform['movieid'] = listmovie;
+
+    list.add(listform).then((DocumentReference doc) =>
+        print('DocumentSnapshot added with ID: ${doc.id}'));
+  }
+
+  createhist() async {
+    var hist = FirebaseFirestore.instance.collection('History');
+    var histform = <String, dynamic>{
+      "usernamehist": usernameController.text.trim(),
+      "historylist": histlist
+    };
+    // histform['usernamehist'] = usernameController.text.trim();
+    print('hist:' + histform['historylist']);
+
+    // histform['historylist'] = histlist;
+
+    hist.add(histform).then((DocumentReference doc) =>
+        print('DocumentSnapshot added with ID: ${doc.id}'));
+  }
 
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles();
@@ -310,10 +375,13 @@ class _SignupScreen extends State<SignupScreen> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-
       final user = FirebaseAuth.instance.currentUser!;
       user.updateDisplayName(usernameController.text.trim());
-
+      print('do createlist');
+      //print(loadtrendingmovie(usernameController.text.trim()).toString());
+      print('createlist finish');
+      createlist();
+      createhist();
       uploadfile();
     } on FirebaseAuthException catch (e) {
       print(e);

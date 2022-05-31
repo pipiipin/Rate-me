@@ -1,4 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:flutter/material.dart';
 import 'package:rate_me/components/tab_view.dart';
@@ -12,8 +14,12 @@ class MovieScreen extends StatefulWidget {
 }
 
 class _MovieScreen extends State<MovieScreen> {
+  bool isLikedss = false;
+  var list = FirebaseFirestore.instance.collection('Listmovie');
+  final user = FirebaseAuth.instance.currentUser!;
   bool selected = false;
   List genre = [];
+  int id = 0;
   String title = "-";
   String runtime = "-";
   String releasedate = "-";
@@ -33,6 +39,28 @@ class _MovieScreen extends State<MovieScreen> {
     super.initState();
   }
 
+  addmovie(int movieid) async {
+    var lists = [movieid];
+    var doc_id;
+    await list.get().then((event) {
+      setState(() {
+        for (var doc in event.docs) {
+          if (user.displayName == doc.data()['usernamelist']) {
+            var listmov = [];
+            listmov = doc.data()['movieid'];
+            doc_id = doc.id;
+          }
+        }
+      });
+    });
+    if (isLikedss) {
+      list.doc(doc_id).update({"movieid": FieldValue.arrayRemove(lists)});
+    }
+    if (!isLikedss) {
+      list.doc(doc_id).update({"movieid": FieldValue.arrayUnion(lists)});
+    }
+  }
+
   loadtrendingmovie() async {
     TMDB tmdbWithCustomLogs = TMDB(ApiKeys(apiKey, readaccesstoken),
         logConfig: const ConfigLogger(
@@ -42,28 +70,41 @@ class _MovieScreen extends State<MovieScreen> {
 
     Map topresult =
         await tmdbWithCustomLogs.v3.movies.getDetails(widget.movieid);
-
-    setState(() {
-      genre = topresult['genres'];
-      title = topresult["title"];
-      runtime = topresult['runtime'].toString();
-      if (topresult['adult']) {
-        rate = '18+';
-      } else {
-        rate = '12+';
-      }
-      releasedate = topresult['release_date'].toString();
-      score = topresult['vote_average'].toString();
-      overview = topresult['overview'];
-      votecount = topresult['vote_count'].toString();
-      posterpath = 'https://image.tmdb.org/t/p/w200' + topresult['poster_path'];
-      backdroppath =
-          'https://image.tmdb.org/t/p/w500' + topresult['backdrop_path'];
+    await list.get().then((event) {
+      setState(() {
+        for (var doc in event.docs) {
+          if (user.displayName == doc.data()['usernamelist']) {
+            var listmov = [];
+            listmov = doc.data()['movieid'];
+            for (var i = 0; i < listmov.length; i++) {
+              if (listmov[i] == topresult['id']) {
+                isLikedss = true;
+              }
+            }
+          }
+        }
+        id = topresult['id'];
+        genre = topresult['genres'];
+        title = topresult["title"];
+        runtime = topresult['runtime'].toString();
+        if (topresult['adult']) {
+          rate = '18+';
+        } else {
+          rate = '12+';
+        }
+        releasedate = topresult['release_date'].toString();
+        score = topresult['vote_average'].toString();
+        overview = topresult['overview'];
+        votecount = topresult['vote_count'].toString();
+        posterpath =
+            'https://image.tmdb.org/t/p/w200' + topresult['poster_path'];
+        backdroppath =
+            'https://image.tmdb.org/t/p/w500' + topresult['backdrop_path'];
+      });
     });
   }
 
   posthead() {
-    print(posterpath);
     return Container(
       width: double.maxFinite,
       height: 300,
@@ -88,7 +129,6 @@ class _MovieScreen extends State<MovieScreen> {
   }
 
   rectangle() {
-    print(widget.movieid);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -157,39 +197,39 @@ class _MovieScreen extends State<MovieScreen> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
-                      child: const Text(
-                        "horror",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0), fontSize: 15),
-                        textAlign: TextAlign.center,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: const Color.fromARGB(127, 204, 20, 43),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
-                      child: const Text(
-                        "drama",
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0), fontSize: 15),
-                        textAlign: TextAlign.center,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: const Color.fromARGB(127, 204, 20, 43),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Container(
+                //       padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
+                //       child: const Text(
+                //         "horror",
+                //         style: TextStyle(
+                //             color: Color.fromARGB(255, 0, 0, 0), fontSize: 15),
+                //         textAlign: TextAlign.center,
+                //       ),
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(20),
+                //         color: const Color.fromARGB(127, 204, 20, 43),
+                //       ),
+                //     ),
+                //     const SizedBox(
+                //       width: 10,
+                //     ),
+                //     Container(
+                //       padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
+                //       child: const Text(
+                //         "drama",
+                //         style: TextStyle(
+                //             color: Color.fromARGB(255, 0, 0, 0), fontSize: 15),
+                //         textAlign: TextAlign.center,
+                //       ),
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(20),
+                //         color: const Color.fromARGB(127, 204, 20, 43),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ]),
         ),
       ],
@@ -277,13 +317,17 @@ class _MovieScreen extends State<MovieScreen> {
                   dotPrimaryColor: Color.fromARGB(255, 75, 75, 75),
                   dotSecondaryColor: Color.fromARGB(255, 0, 0, 0),
                 ),
-                likeBuilder: (bool isLiked) {
+                likeBuilder: (islikedss) {
+                  addmovie(id);
+
                   return Icon(
-                    isLiked ? Icons.check : Icons.add,
-                    color: isLiked ? Color.fromARGB(255, 0, 0, 0) : Colors.grey,
+                    isLikedss ? Icons.check : Icons.add,
+                    color:
+                        isLikedss ? Color.fromARGB(255, 0, 0, 0) : Colors.grey,
                     size: 35,
                   );
                 },
+                // onTap: addmovie(id),
               ),
               const Text(
                 'add to List',

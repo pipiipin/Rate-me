@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:rate_me/screens/movie.dart';
@@ -10,6 +12,24 @@ class top10 extends StatefulWidget {
 }
 
 class _top10State extends State<top10> {
+  var list = FirebaseFirestore.instance.collection('History');
+  final user = FirebaseAuth.instance.currentUser!;
+  addmovie(int movieid) async {
+    var lists = [movieid];
+    var doc_id;
+    await list.get().then((event) {
+      setState(() {
+        for (var doc in event.docs) {
+          if (user.displayName == doc.data()['usernamehist']) {
+            doc_id = doc.id;
+          }
+        }
+      });
+    });
+    list.doc(doc_id).update({"historylist": FieldValue.arrayUnion(lists)});
+  }
+
+  //addmovie(movie[index]['id']);
   List topmovie = [];
   final String apiKey = "77007faac05ec9c7ac4e6c1bd5e8c917";
   final readaccesstoken =
@@ -80,6 +100,7 @@ class _top10State extends State<top10> {
           color: Colors.black,
           child: InkWell(
             onTap: () {
+              addmovie(topmovie[index]['id']);
               Navigator.push(
                   context,
                   MaterialPageRoute(
